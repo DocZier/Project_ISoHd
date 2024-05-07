@@ -1,6 +1,8 @@
-package com.example.kr;
+package com.example.kr.web;
 
 import android.util.Log;
+
+import com.example.kr.database.HardDriveData;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

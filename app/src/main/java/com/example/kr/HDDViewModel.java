@@ -5,6 +5,10 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.example.kr.database.AppDatabase;
+import com.example.kr.database.HardDriveDao;
+import com.example.kr.database.HardDriveData;
+
 import java.util.ArrayList;
 import java.util.List;
 

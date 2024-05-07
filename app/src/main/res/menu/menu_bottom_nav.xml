@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/itHome"
+        app:showAsAction="ifRoom"
+        android:title="Главная"
+        />
+    <item
+        android:id="@+id/itFavorite"
+        app:showAsAction="ifRoom"
+        android:title="Избранное"
+        />
+    <item
+        android:id="@+id/itInfo"
+        app:showAsAction="ifRoom"
+        android:title="Справка"
+        />
+</menu>
