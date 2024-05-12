@@ -1,22 +1,28 @@
-package com.example.kr;
+package com.example.kr.model;
 
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.Transformations;
 
 import com.example.kr.database.AppDatabase;
 import com.example.kr.database.HardDriveDao;
 import com.example.kr.database.HardDriveData;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 
 
 public class HDDViewModel extends AndroidViewModel
 {
     private HardDriveDao mDriveDao;
     private LiveData<List<HardDriveData>> Drivers;
+    private final MediatorLiveData<List<HardDriveData>> sortedDrivers = new MediatorLiveData<>();
 
     public HDDViewModel(Application application)
     {
@@ -24,21 +30,23 @@ public class HDDViewModel extends AndroidViewModel
         AppDatabase db = AppDatabase.getDatabase(application);
         mDriveDao = db.hardDriveDao();
         Drivers = mDriveDao.getAll();
+
+        sortedDrivers.addSource(Drivers, hardDriveData -> {
+            List<HardDriveData> sortedList = new ArrayList<>(hardDriveData);
+            sortedList.sort(Comparator.comparingDouble(HardDriveData::getCapacity));
+            sortedDrivers.setValue(sortedList);
+        });
+
+
     }
 
-    LiveData<List<HardDriveData>> getDrivers()
+    public LiveData<List<HardDriveData>> getDrivers()
     {
         return Drivers;
     }
 
-    public void reset()
-    {
-        Drivers = mDriveDao.getAll();
-    }
-
-    public void filter(ArrayList<String> manufactors, double min, double max)
-    {
-        //TODO закончить фильтрацию, желательно не через огромное количество if и запросов, а получать и фильтровать их.
+    public LiveData<List<HardDriveData>> getSortedDrivers() {
+        return sortedDrivers;
     }
 
     LiveData<List<HardDriveData>> getManufactors(String man)

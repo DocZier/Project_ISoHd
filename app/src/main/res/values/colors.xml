@@ -3,8 +3,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="olive">#90A955</color>
-    <color name="light_olive">#ECF39E</color>
+    <color name="light_olive">#f0ead2</color>
     <color name="dark_olive">#4F772D</color>
     <color name="green">#31572C</color>
     <color name="dark_green">#132A13</color>
+    <color name="dark_peach">#B7BEA7</color>
 </resources>

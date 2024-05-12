@@ -10,11 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.kr.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FavoriteFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class FavoriteFragment extends Fragment {
 
 

@@ -3,17 +3,13 @@ package com.example.kr.activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.kr.R;
-import com.example.kr.adapter.AdapterViewPager;
+import com.example.kr.model.AdapterViewPager;
 import com.example.kr.fragment.DatabaseFragment;
 import com.example.kr.fragment.FavoriteFragment;
 import com.example.kr.fragment.InfoFragment;

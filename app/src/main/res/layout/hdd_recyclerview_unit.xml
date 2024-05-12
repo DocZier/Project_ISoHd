@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/layout_bg"
+    android:background="@drawable/recyclerview_bg"
     >
 
     <LinearLayout
@@ -24,21 +24,23 @@
             android:fontFamily="sans-serif"
             android:text="IAUSDY2r74687124y412536"
             android:textAllCaps="true"
-            android:textColor="@color/black"
-            android:textSize="26dp"
+            android:textColor="@color/olive"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Объём:"
-                android:textColor="@color/black"
+                android:textColor="@color/light_olive"
                 android:textSize="16dp"
                 android:layout_weight="1"/>
 
@@ -50,38 +52,13 @@
                 android:text="28 TB"
                 android:textAlignment="viewEnd"
                 android:layout_weight="1"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="1">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Производитель:"
-                android:textColor="@color/black"
                 android:textSize="16dp"
-
-                android:layout_weight="1"/>
-
-            <TextView
-                android:id="@+id/view_manufactorname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAlignment="viewEnd"
-                android:text="Seagate"
-                android:layout_weight="1"
-                android:textSize="20dp"
                 android:textStyle="bold"
-                android:textColor="@color/black"/>
+                android:textColor="@color/light_olive"/>
+
         </LinearLayout>
+
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

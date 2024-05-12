@@ -1,4 +1,4 @@
-package com.example.kr.adapter;
+package com.example.kr.model;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

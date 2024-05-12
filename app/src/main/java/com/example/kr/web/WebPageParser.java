@@ -61,12 +61,12 @@ public class WebPageParser
             i+=1;
         }
 
-        while(!trs.get(i).hasClass("text-center pt-3"))
+        while(i < trs.size() && !trs.get(i).hasClass("text-center pt-3"))
         {
             i++;
         }
         i++;
-        while(!trs.get(i).hasClass("text-center pt-3"))
+        while(i < trs.size() && !trs.get(i).hasClass("text-center pt-3"))
         {
             if(!trs.get(i).getElementsByTag("td").get(0).getElementsByTag("a").isEmpty() &&
                     trs.get(i).getElementsByTag("td").get(0).getElementsByTag("a").hasAttr("href") &&
