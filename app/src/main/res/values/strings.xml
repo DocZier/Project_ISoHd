@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">KR</string>
 
+    <string-array name="capacity_units">
+        <item>Гигабайты</item>
+        <item>Терабайты</item>
+    </string-array>
 </resources>

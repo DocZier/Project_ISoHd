@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 import com.example.kr.database.AppDatabase;
@@ -33,10 +34,9 @@ public class HDDViewModel extends AndroidViewModel
 
         sortedDrivers.addSource(Drivers, hardDriveData -> {
             List<HardDriveData> sortedList = new ArrayList<>(hardDriveData);
-            sortedList.sort(Comparator.comparingDouble(HardDriveData::getCapacity));
+            sortedList.sort(Comparator.comparingDouble(HardDriveData::getCapacity).reversed());
             sortedDrivers.setValue(sortedList);
         });
-
 
     }
 

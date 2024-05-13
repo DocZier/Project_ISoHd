@@ -24,7 +24,7 @@
             android:fontFamily="sans-serif"
             android:text="IAUSDY2r74687124y412536"
             android:textAllCaps="true"
-            android:textColor="@color/olive"
+            android:textColor="@color/light_olive"
             android:textSize="20dp"
             android:textStyle="bold" />
 

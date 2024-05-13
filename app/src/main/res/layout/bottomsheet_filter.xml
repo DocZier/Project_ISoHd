@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bottomsheet_bg"
+    android:gravity="center_horizontal"
+    android:padding="15dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Производители"
+            android:textColor="@color/light_olive"
+            android:textSize="20dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/textview_clear_manufactor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Очистить"
+            android:textColor="@color/light_olive"
+            android:textSize="16dp"
+            android:visibility="gone"
+            android:clickable="true"
+            android:textAlignment="viewEnd"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <GridLayout
+        android:id="@+id/manufactor_grid_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:layout_weight="1"
+        android:background="@drawable/bottomsheet_item_bg"
+        >
+        <CheckBox
+            android:id="@+id/checkbox_seagate"
+            android:saveEnabled="true"
+            android:text="Seagate"
+            android:textSize="14dp"
+            />
+        <CheckBox
+            android:id="@+id/checkbox_toshiba"
+            android:text="Toshiba"
+            android:saveEnabled="true"
+            android:textSize="14dp"
+            />
+        <CheckBox
+            android:id="@+id/checkbox_wdigital"
+            android:text="Western Digital"
+            android:saveEnabled="true"
+            android:textSize="14dp"
+            />
+        <CheckBox
+            android:id="@+id/checkbox_hitachi"
+            android:text="Hitachi"
+            android:saveEnabled="true"
+            android:textSize="14dp"
+            />
+        <CheckBox
+            android:id="@+id/checkbox_samsung"
+            android:text="Samsung"
+            android:saveEnabled="true"
+            android:textSize="14dp"
+            />
+    </GridLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Объём"
+            android:textColor="@color/light_olive"
+            android:textSize="20dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/textview_clear_capacity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Очистить"
+            android:textColor="@color/light_olive"
+            android:textSize="16dp"
+            android:visibility="gone"
+            android:clickable="true"
+            android:textAlignment="viewEnd"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:background="@drawable/bottomsheet_item_bg"
+        >
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_min_cpacity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            >
+            <EditText
+                android:id="@+id/et_min_capacity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:inputType="number"
+                android:hint="От:" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_max_cpacity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingBottom="2dp">
+            <EditText
+                android:id="@+id/et_max_capacity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:inputType="number"
+                android:hint="До:" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Интерфейс"
+            android:textColor="@color/light_olive"
+            android:textSize="20dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/textview_clear_interface"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Очистить"
+            android:textColor="@color/light_olive"
+            android:textSize="16dp"
+            android:visibility="gone"
+            android:clickable="true"
+            android:textAlignment="viewEnd"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/interface_linear_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:background="@drawable/bottomsheet_item_bg"
+        android:padding="10dp"
+        >
+        <CheckBox
+            android:id="@+id/checkbox_sata1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:saveEnabled="true"
+            android:text="Sata 1"
+            android:textSize="14dp"
+            />
+        <CheckBox
+            android:id="@+id/checkbox_sata2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sata 2"
+            android:saveEnabled="true"
+            android:textSize="14dp"
+            />
+        <CheckBox
+            android:id="@+id/checkbox_sata3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sata 3"
+            android:saveEnabled="true"
+            android:textSize="14dp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Форм-Фактор"
+            android:textColor="@color/light_olive"
+            android:textSize="20dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/textview_clear_form_factor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Очистить"
+            android:textColor="@color/light_olive"
+            android:textSize="16dp"
+            android:visibility="gone"
+            android:clickable="true"
+            android:textAlignment="viewEnd"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/form_factor_linear_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:background="@drawable/bottomsheet_item_bg"
+        android:padding="10dp"
+        >
+        <CheckBox
+            android:id="@+id/checkbox_ff_2_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3.5''"
+            android:saveEnabled="true"
+            android:textSize="14dp"
+            />
+        <CheckBox
+            android:id="@+id/checkbox_ff_3_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2.5''"
+            android:saveEnabled="true"
+            android:textSize="14dp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Скорость вращения "
+            android:textColor="@color/light_olive"
+            android:textSize="20dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/textview_clear_rotation_speed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Очистить"
+            android:textColor="@color/light_olive"
+            android:textSize="16dp"
+            android:visibility="gone"
+            android:clickable="true"
+            android:textAlignment="viewEnd"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:background="@drawable/bottomsheet_item_bg"
+        >
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_min_rpm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            >
+            <EditText
+                android:id="@+id/et_min_rpm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:inputType="number"
+                android:hint="От:" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_max_rpm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingBottom="2dp">
+            <EditText
+                android:id="@+id/et_max_rpm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:inputType="number"
+                android:hint="До:" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:background="@drawable/bottomsheet_item_bg"
+        android:layout_marginTop="10dp"
+        >
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bottomsheet_bg"
+            >
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/button_apply_filers"
+                android:text="Применить"
+                android:textColor="@color/button_bg_text_color"
+                android:backgroundTint="@color/button_bg_color"
+                android:textSize="20dp"
+                android:layout_weight="1"/>
+        </FrameLayout>
+    </FrameLayout>
+</LinearLayout>
