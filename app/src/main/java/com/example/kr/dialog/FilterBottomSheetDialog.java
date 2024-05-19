@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.example.kr.R;
+import com.example.kr.model.HDDViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -28,7 +29,7 @@ import java.util.Arrays;
 
 public class FilterBottomSheetDialog extends BottomSheetDialog {
 
-    private Button applyButton;
+    HDDViewModel hddViewModel;
     private EditText etMinCapacity, etMaxCapacity, etMinRpm, etMaxRpm;
     private CheckBox cbSeagate, cbWD, cbSamsung, cbHitachi, cbToshiba;
     private CheckBox cbSata1, cbSata2, cbSata3;
@@ -45,10 +46,10 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
 
     private SharedPreferences sharedPrefs;
     private static final String PREFS_NAME = "filter_prefs";
-    public FilterBottomSheetDialog(Context context) {
+    public FilterBottomSheetDialog(Context context, HDDViewModel hddViewModel) {
         super(context);
         setContentView(R.layout.bottomsheet_filter);
-
+        this.hddViewModel = hddViewModel;
 
         etMinCapacity = findViewById(R.id.et_min_capacity);
         etMaxCapacity = findViewById(R.id.et_max_capacity);
@@ -58,7 +59,7 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
         // Инициализация списков с дефолтными значениями
         Manufacturers.addAll(Arrays.asList("Seagate", "Western Digital", "Samsung", "Hitachi", "Toshiba"));
         Interfaces.addAll(Arrays.asList("SATA 1", "SATA 2", "SATA 3"));
-        FormFactors.addAll(Arrays.asList("3.5''", "2.5''"));
+        FormFactors.addAll(Arrays.asList("3.5\"", "2.5\""));
 
         sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
@@ -107,14 +108,14 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
 
         restoreFilterState();
 
-        applyButton = findViewById(R.id.button_apply_filers);
+        Button applyButton = findViewById(R.id.button_apply_filers);
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
 
-                int minCapacity = getValidValue(etMinCapacity, 0);
-                int maxCapacity = getValidValue(etMaxCapacity, Integer.MAX_VALUE);
+                double minCapacity = getValidValue(etMinCapacity, 0);
+                double maxCapacity = getValidValue(etMaxCapacity, Integer.MAX_VALUE);
 
                 int minRpm = getValidValue(etMinRpm, 0);
                 int maxRpm = getValidValue(etMaxRpm, Integer.MAX_VALUE);
@@ -134,10 +135,29 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
 
                 saveFilterState();
 
+                hddViewModel.filterDrivers(selectedManufacturers, minCapacity, maxCapacity,
+                        selectedInterfaces, selectedFormFactors, minRpm, maxRpm);
+
                 dismiss();
             }
         });
 
+        Button clearButton = findViewById(R.id.button_clear_filers);
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                ArrayList<String> titles = new ArrayList<>();
+                titles.addAll(Arrays.asList("manufacturers", "capacity", "interfaces", "formfactors", "rotationspeed"));
+
+                for(String title: titles)
+                    clearFilters(title);
+
+                hddViewModel.clearFilteredDrivers();
+
+                dismiss();
+            }
+        });
 
 
         etMinCapacity.addTextChangedListener(new MinValueValidator(etMinCapacity, 1));

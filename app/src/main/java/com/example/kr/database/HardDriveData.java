@@ -19,21 +19,18 @@ public class HardDriveData
     private String interfc;
     @ColumnInfo(name = "FormFactor")
     private String formFactor;
-    @ColumnInfo(name = "CacheMemory")
-    private String cache;
     @ColumnInfo(name = "RotatingSpeed")
     private int speed;
 
     public HardDriveData()
     {}
 
-    public HardDriveData(String manufactor, String model, double capacity, String interfc, String formFactor, String cache, int speed) {
+    public HardDriveData(String manufactor, String model, double capacity, String interfc, String formFactor, int speed) {
         this.manufactor = manufactor;
         this.model = model;
         this.capacity = capacity;
         this.interfc = interfc;
         this.formFactor = formFactor;
-        this.cache = cache;
         this.speed = speed;
     }
 
@@ -75,14 +72,6 @@ public class HardDriveData
 
     public void setFormFactor(String formFactor) {
         this.formFactor = formFactor;
-    }
-
-    public String getCache() {
-        return cache;
-    }
-
-    public void setCache(String cache) {
-        this.cache = cache;
     }
 
     public int getSpeed() {

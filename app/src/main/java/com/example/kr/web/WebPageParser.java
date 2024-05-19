@@ -32,7 +32,6 @@ public class WebPageParser
         String cap = trs.get(3).getElementsByTag("td").get(1).ownText();
         String inter = "";
         String form_factor = "";
-        String cache = "";
         double capacity = 0;
         int speed = 0;
         int i=5;
@@ -52,6 +51,8 @@ public class WebPageParser
         if(trs.get(i).getElementsByTag("td").get(0).ownText().equals("version"))
         {
             inter+=trs.get(i).getElementsByTag("td").get(1).ownText();
+            if(inter.contains("SATA"))
+                inter = inter.replace("SATA", "");
             i+=1;
         }
 
@@ -70,13 +71,6 @@ public class WebPageParser
         {
             if(!trs.get(i).getElementsByTag("td").get(0).getElementsByTag("a").isEmpty() &&
                     trs.get(i).getElementsByTag("td").get(0).getElementsByTag("a").hasAttr("href") &&
-                    trs.get(i).getElementsByTag("td").get(0).getElementsByTag("a").get(0).ownText().equals("Cache buffer"))
-            {
-                cache =trs.get(i).getElementsByTag("td").get(1).ownText();
-            }
-
-            if(!trs.get(i).getElementsByTag("td").get(0).getElementsByTag("a").isEmpty() &&
-                    trs.get(i).getElementsByTag("td").get(0).getElementsByTag("a").hasAttr("href") &&
                     trs.get(i).getElementsByTag("td").get(0).getElementsByTag("a").get(0).ownText().equals("Rotation rate"))
             {
                 speed = Integer.parseInt(trs.get(i).getElementsByTag("td").get(1).ownText().substring(0, trs.get(i).getElementsByTag("td").get(1).ownText().length()-3));
@@ -84,7 +78,7 @@ public class WebPageParser
             i++;
         }
 
-        HardDriveData driveData = new HardDriveData(man, model, capacity, inter, form_factor, cache, speed);
+        HardDriveData driveData = new HardDriveData(man, model, capacity, inter, form_factor, speed);
         return  driveData;
     }
 

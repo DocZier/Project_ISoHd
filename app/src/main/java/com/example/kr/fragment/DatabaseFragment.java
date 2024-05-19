@@ -95,7 +95,7 @@ public class DatabaseFragment extends Fragment {
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FilterBottomSheetDialog dialog = new FilterBottomSheetDialog(requireContext());
+                FilterBottomSheetDialog dialog = new FilterBottomSheetDialog(requireContext(), hddViewModel);
                 dialog.show();
             }
         });

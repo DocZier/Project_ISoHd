@@ -245,7 +245,7 @@
             android:id="@+id/checkbox_ff_2_5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="3.5''"
+            android:text="3.5&quot;"
             android:saveEnabled="true"
             android:textSize="14dp"
             />
@@ -253,7 +253,7 @@
             android:id="@+id/checkbox_ff_3_5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2.5''"
+            android:text="2.5&quot;"
             android:saveEnabled="true"
             android:textSize="14dp"
             />
@@ -325,28 +325,25 @@
                 android:hint="До:" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
-    <FrameLayout
+
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="1"
-        android:background="@drawable/bottomsheet_item_bg"
-        android:layout_marginTop="10dp"
-        >
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bottomsheet_bg"
-            >
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/button_apply_filers"
-                android:text="Применить"
-                android:textColor="@color/button_bg_text_color"
-                android:backgroundTint="@color/button_bg_color"
-                android:textSize="20dp"
-                android:layout_weight="1"/>
-        </FrameLayout>
-    </FrameLayout>
+        android:id="@+id/button_apply_filers"
+        android:text="Применить"
+        android:textColor="@color/button_bg_text_color"
+        android:backgroundTint="@color/button_bg_color"
+        android:textSize="20dp"
+        android:layout_weight="1"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_clear_filers"
+        android:text="Сбросить"
+        android:textColor="@color/button_bg_text_color"
+        android:backgroundTint="@color/button_bg_color"
+        android:textSize="20dp"
+        android:layout_weight="1"/>
+
 </LinearLayout>
