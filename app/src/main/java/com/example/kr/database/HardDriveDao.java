@@ -33,7 +33,7 @@ public interface HardDriveDao
             "RotatingSpeed BETWEEN :minRotatingSpeed AND :maxRotatingSpeed")
     LiveData<List<HardDriveData>> getFiltered(String[] manufactors, double minCapacity,
                                               double maxCapacity, //String[] interfaces,
-                                              String[] formFactors, int minRotatingSpeed,
+                                              Double[] formFactors, int minRotatingSpeed,
                                               int maxRotatingSpeed);
     @Query("SELECT * FROM hard_drives WHERE uid LIKE :id")
     LiveData<HardDriveData> findID(int id);

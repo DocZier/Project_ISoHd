@@ -36,11 +36,11 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
     private CheckBox cbFF2_5, cbFF3_5;
     private ArrayList<String> selectedManufacturers = new ArrayList<>();
     private ArrayList<String> selectedInterfaces = new ArrayList<>();
-    private ArrayList<String> selectedFormFactors = new ArrayList<>();
+    private ArrayList<Double> selectedFormFactors = new ArrayList<>();
 
     private ArrayList<String> Manufacturers = new ArrayList<>();
     private ArrayList<String> Interfaces = new ArrayList<>();
-    private ArrayList<String> FormFactors = new ArrayList<>();
+    private ArrayList<Double> FormFactors = new ArrayList<>();
 
     private TextView tvClearManufacturer, tvClearCapacity, tvClearInterface, tvClearFormFactor, tvClearRotationSpeed;
 
@@ -59,7 +59,7 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
         // Инициализация списков с дефолтными значениями
         Manufacturers.addAll(Arrays.asList("Seagate", "Western Digital", "Samsung", "Hitachi", "Toshiba"));
         Interfaces.addAll(Arrays.asList("SATA 1", "SATA 2", "SATA 3"));
-        FormFactors.addAll(Arrays.asList("3.5\"", "2.5\""));
+        FormFactors.addAll(Arrays.asList(3.5, 2.5));
 
         sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
@@ -103,8 +103,8 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
          cbFF2_5 = findViewById(R.id.checkbox_ff_2_5);
          cbFF3_5 = findViewById(R.id.checkbox_ff_3_5);
 
-        cbFF2_5.setOnCheckedChangeListener((buttonView, isChecked) -> updateFilterList(selectedFormFactors, "3.5''", isChecked));
-        cbFF3_5.setOnCheckedChangeListener((buttonView, isChecked) -> updateFilterList(selectedFormFactors, "2.5''", isChecked));
+        cbFF2_5.setOnCheckedChangeListener((buttonView, isChecked) -> updateFilterList(selectedFormFactors, "3.5", isChecked, 0));
+        cbFF3_5.setOnCheckedChangeListener((buttonView, isChecked) -> updateFilterList(selectedFormFactors, "2.5", isChecked, 0));
 
         restoreFilterState();
 
@@ -306,11 +306,20 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
         updateClearButtonVisibility();
     }
 
+    private void updateFilterList(ArrayList<Double> list, String value, boolean isChecked, int i)
+    {
+        if (isChecked) {
+            list.add(Double.parseDouble(value));
+        } else {
+            list.remove(Double.parseDouble(value));
+        }
+        updateClearButtonVisibility();
+    }
+
     private void clearFilters(String filterType) {
         switch (filterType) {
             case "manufacturers":
                 selectedManufacturers.clear();
-
 
                 // Сброс CheckBox для производителей
                 GridLayout manufacturersGridLayout = findViewById(R.id.manufactor_grid_layout);
@@ -339,7 +348,6 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
                 break;
             case "formfactors":
                 selectedFormFactors.clear();
-
                 // Сброс CheckBox для форм-факторов
                 LinearLayout formFactorsLinearLayout = findViewById(R.id.form_factor_linear_layout);
                 for (int i = 0; i < formFactorsLinearLayout.getChildCount(); i++) {

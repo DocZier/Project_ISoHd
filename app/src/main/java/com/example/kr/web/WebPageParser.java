@@ -31,7 +31,7 @@ public class WebPageParser
         String model = trs.get(2).getElementsByTag("td").get(1).ownText();
         String cap = trs.get(3).getElementsByTag("td").get(1).ownText();
         String inter = "";
-        String form_factor = "";
+        double form_factor = 0;
         double capacity = 0;
         int speed = 0;
         int i=5;
@@ -58,7 +58,7 @@ public class WebPageParser
 
         if(trs.get(i).getElementsByTag("td").get(0).getElementsByTag("a").get(0).ownText().equals("Form-factor"))
         {
-            form_factor = trs.get(i).getElementsByTag("td").get(1).ownText();
+            form_factor = Double.parseDouble(trs.get(i).getElementsByTag("td").get(1).ownText().substring(0, trs.get(i).getElementsByTag("td").get(1).ownText().length()-1));
             i+=1;
         }
 

@@ -1,6 +1,7 @@
 package com.example.kr.database;
 
 import androidx.room.ColumnInfo;
+import androidx.room.Dao;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -18,14 +19,14 @@ public class HardDriveData
     @ColumnInfo(name = "Interface")
     private String interfc;
     @ColumnInfo(name = "FormFactor")
-    private String formFactor;
+    private double formFactor;
     @ColumnInfo(name = "RotatingSpeed")
     private int speed;
 
     public HardDriveData()
     {}
 
-    public HardDriveData(String manufactor, String model, double capacity, String interfc, String formFactor, int speed) {
+    public HardDriveData(String manufactor, String model, double capacity, String interfc, double formFactor, int speed) {
         this.manufactor = manufactor;
         this.model = model;
         this.capacity = capacity;
@@ -66,11 +67,11 @@ public class HardDriveData
         this.interfc = interfc;
     }
 
-    public String getFormFactor() {
+    public double getFormFactor() {
         return formFactor;
     }
 
-    public void setFormFactor(String formFactor) {
+    public void setFormFactor(double formFactor) {
         this.formFactor = formFactor;
     }
 

@@ -52,12 +52,12 @@ public class HDDViewModel extends AndroidViewModel
     }
 
     public void filterDrivers(ArrayList<String> manufactors, double minCapacity, double maxCapacity,
-                              ArrayList<String> interfaces, ArrayList<String> formFactors,
+                              ArrayList<String> interfaces, ArrayList<Double> formFactors,
                               int minRotatingSpeed, int maxRotatingSpeed)
     {
         filteredDrivers = mDriveDao.getFiltered(manufactors.toArray(new String[manufactors.size()]),
                 minCapacity, maxCapacity, //interfaces.toArray(new String[interfaces.size()]),
-                formFactors.toArray(new String[formFactors.size()]), minRotatingSpeed, maxRotatingSpeed);
+                formFactors.toArray(new Double[formFactors.size()]), minRotatingSpeed, maxRotatingSpeed);
 
         sortedDrivers.removeSource(Drivers);
 
