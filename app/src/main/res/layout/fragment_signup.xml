@@ -41,11 +41,23 @@
                 android:id="@+id/username_signup"
                 android:background="@drawable/custom_edittext"
                 android:drawablePadding="8dp"
+                android:hint="Имя пользователя"
+                android:textColorHint="@color/dark_peach"
+                android:padding="8dp"
+                android:textColor="@color/light_olive"
+                android:layout_marginTop="20dp"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/email_signup"
+                android:background="@drawable/custom_edittext"
+                android:drawablePadding="8dp"
                 android:hint="Почта"
                 android:textColorHint="@color/dark_peach"
                 android:padding="8dp"
                 android:textColor="@color/light_olive"
-                android:layout_marginTop="40dp"/>
+                android:layout_marginTop="20dp"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="50dp"

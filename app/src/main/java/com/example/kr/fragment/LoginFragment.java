@@ -1,16 +1,14 @@
 package com.example.kr.fragment;
 
 import static android.content.ContentValues.TAG;
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
 
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,13 +30,15 @@ public class LoginFragment extends Fragment {
     EditText usernameEdit;
     EditText passwordEdit;
     FirebaseAuth mAuth;
+    Button loginButton;
+
     public LoginFragment() {
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -46,12 +46,43 @@ public class LoginFragment extends Fragment {
     {
         View root = inflater.inflate(R.layout.fragment_login, container, false);
 
-        mAuth = ((MainActivity) getActivity()).mAuth;
-
         usernameEdit = root.findViewById(R.id.username_login);
         passwordEdit = root.findViewById(R.id.password_login);
+        loginButton = root.findViewById(R.id.loginButton);
 
-        Button loginButton = root.findViewById(R.id.loginButton);
+        loginButton.setEnabled(false);
+
+        usernameEdit.addTextChangedListener(loginTextWatcher);
+        passwordEdit.addTextChangedListener(loginTextWatcher);
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = usernameEdit.getText().toString();
+                String password = passwordEdit.getText().toString();
+
+                if(email.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(getActivity(), "Пожалуйста, заполните все поля", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                mAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    if (user != null) {
+                                        ((MainActivity) getActivity()).hideLoginFragment();
+                                    }
+                                } else {
+                                    Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                    Toast.makeText(getActivity(), "Ошибка авторизации.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+        });
 
         TextView signupTextView = root.findViewById(R.id.signupText);
         TextView returnTextView = root.findViewById(R.id.returnText);
@@ -64,6 +95,7 @@ public class LoginFragment extends Fragment {
                 SignUpFragment signUpFragment = new SignUpFragment();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragments_container, signUpFragment, "signup");
+                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
         });
@@ -71,46 +103,26 @@ public class LoginFragment extends Fragment {
         returnTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                //TODO remove fragment(if it still exist)
-                getActivity().findViewById(R.id.fragments_container).setVisibility(GONE);
-                getActivity().findViewById(R.id.main_layout).setVisibility(VISIBLE);
-            }
-        });
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = usernameEdit.getText().toString();
-                String password = passwordEdit.getText().toString();
-
-                if(username.isEmpty() || password.isEmpty())
-                {
-                    if(username.isEmpty())
-                    {
-                        return;
-                    }
-                    return;
-                }
-                mAuth.createUserWithEmailAndPassword(username, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Log.d(TAG, "createUserWithEmail:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                } else {
-                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                    Toast.makeText(getActivity(), "Authentication failed.", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                ((MainActivity) getActivity()).hideLoginFragment();
             }
         });
 
         return root;
     }
 
-    //TODO add textwatcher
+    private TextWatcher loginTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String emailInput = usernameEdit.getText().toString().trim();
+            String passwordInput = passwordEdit.getText().toString().trim();
+
+            loginButton.setEnabled(!emailInput.isEmpty() && !passwordInput.isEmpty());
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {}
+    };
 }

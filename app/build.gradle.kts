@@ -34,6 +34,7 @@ android {
 
 dependencies {
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.database)
     val room_version = "2.6.1"
     val jsoup_version = "1.17.2"
 

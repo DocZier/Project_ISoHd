@@ -5,7 +5,8 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.os.Bundle;
-
+import android.text.Editable;
+import android.text.TextWatcher;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -21,47 +22,58 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kr.R;
+import com.example.kr.database.HardDriveData;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignUpFragment extends Fragment {
     EditText usernameEdit;
+    EditText emailEdit;
     EditText passwordEdit;
-    EditText passwordConfirmEdit;
+    Button signupButton;
     FirebaseAuth mAuth;
-    public SignUpFragment()
-    {
+    DatabaseReference mDatabase;
 
-    }
-
-    @Override public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public SignUpFragment() {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_signup, container, false);
 
-        mAuth = FirebaseAuth.getInstance();
-
         usernameEdit = root.findViewById(R.id.username_signup);
+        emailEdit = root.findViewById(R.id.email_signup);
         passwordEdit = root.findViewById(R.id.password_signup);
-        passwordConfirmEdit = root.findViewById(R.id.password_signup_copy);
-
-        Button loginButton = root.findViewById(R.id.signupButton);
+        signupButton = root.findViewById(R.id.signupButton);
 
         TextView loginTextView = root.findViewById(R.id.loginText);
-        TextView returnTextView = root.findViewById(R.id.returnText);
+
+        signupButton.setEnabled(false);
+
+        // Add TextWatchers
+        usernameEdit.addTextChangedListener(signupTextWatcher);
+        emailEdit.addTextChangedListener(signupTextWatcher);
+        passwordEdit.addTextChangedListener(signupTextWatcher);
 
         loginTextView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 LoginFragment loginFragment = new LoginFragment();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -70,44 +82,36 @@ public class SignUpFragment extends Fragment {
             }
         });
 
-        returnTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                //TODO remove fragment(if it still exist)
-                getActivity().findViewById(R.id.fragments_container).setVisibility(GONE);
-                getActivity().findViewById(R.id.main_layout).setVisibility(VISIBLE);
-            }
-        });
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String username = usernameEdit.getText().toString();
+                String email = emailEdit.getText().toString();
                 String password = passwordEdit.getText().toString();
-                String password_confirm = passwordConfirmEdit.getText().toString();
 
-                if (username.isEmpty() || password.isEmpty() || password_confirm.isEmpty()) {
-                    if (username.isEmpty()) {
-                        return;
-                    }
-                    if (password.isEmpty()) {
-                        return;
-                    }
+                if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(getActivity(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(!password.equals(password_confirm))
-                {
-                    return;
-                }
-                mAuth.createUserWithEmailAndPassword(username, password)
+
+                mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Log.d(TAG, "createUserWithEmail:success");
                                     FirebaseUser user = mAuth.getCurrentUser();
+                                    String userId = user.getUid();
+
+                                    Map<String, Object> userMap = new HashMap<>();
+                                    userMap.put("username", username);
+                                    userMap.put("email", email);
+                                    userMap.put("favorites", new ArrayList<HardDriveData>());
+
+                                    mDatabase.child("users").child(userId).setValue(userMap);
+
+                                    Log.d(TAG, "createUserWithEmail:success");
+                                    getActivity().findViewById(R.id.fragments_container).setVisibility(GONE);
+                                    getActivity().findViewById(R.id.main_layout).setVisibility(VISIBLE);
                                 } else {
                                     Log.w(TAG, "createUserWithEmail:failure", task.getException());
                                     Toast.makeText(getActivity(), "Authentication failed.", Toast.LENGTH_SHORT).show();
@@ -116,9 +120,25 @@ public class SignUpFragment extends Fragment {
                         });
             }
         });
-
         return root;
     }
 
-    //TODO add textwatcher
+    private TextWatcher signupTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String usernameInput = usernameEdit.getText().toString().trim();
+            String emailInput = emailEdit.getText().toString().trim();
+            String passwordInput = passwordEdit.getText().toString().trim();
+
+            signupButton.setEnabled(!usernameInput.isEmpty() && !emailInput.isEmpty() && !passwordInput.isEmpty());
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+        }
+    };
 }
