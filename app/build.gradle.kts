@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.androidApplication)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -32,6 +33,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.firebase.auth)
     val room_version = "2.6.1"
     val jsoup_version = "1.17.2"
 

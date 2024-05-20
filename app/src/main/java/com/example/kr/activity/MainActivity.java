@@ -15,6 +15,8 @@ import com.example.kr.fragment.FavoriteFragment;
 import com.example.kr.fragment.InfoFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
@@ -23,11 +25,26 @@ public class MainActivity extends AppCompatActivity {
     ViewPager2 pagerMain;
     ArrayList<Fragment> fragments = new ArrayList<>();
     BottomNavigationView navigationView;
+
+    public FirebaseAuth mAuth;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mAuth = FirebaseAuth.getInstance();
 
         pagerMain = findViewById(R.id.pagerMain);
         navigationView = findViewById(R.id.bottomNav);
@@ -37,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         fragments.add(new InfoFragment());
 
         AdapterViewPager adapterViewPager = new AdapterViewPager(this, fragments);
-        //Set adapter
+
         pagerMain.setAdapter(adapterViewPager);
         pagerMain.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
