@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,58 +7,90 @@
     android:layout_height="wrap_content"
     android:background="@drawable/recyclerview_bg"
     >
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <ViewSwitcher
+        android:id="@+id/viewSwitcher"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="5dp"
-        android:id="@+id/unit"
-        android:gravity="center"
-        >
-        <TextView
-            android:id="@+id/view_modelname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif"
-            android:text="IAUSDY2r74687124y412536"
-            android:textAllCaps="true"
-            android:textColor="@color/light_olive"
-            android:textSize="20dp"
-            android:textStyle="bold" />
+        android:inAnimation="@android:anim/slide_in_left"
+        android:outAnimation="@android:anim/slide_out_right"
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:id="@+id/unit"
+            android:gravity="center"
             android:layout_weight="1"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
 
+            >
             <TextView
+                android:id="@+id/view_modelname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Объём:"
-                android:textColor="@color/light_olive"
-                android:textSize="16dp"
-                android:layout_weight="1"/>
-
-
-            <TextView
-                android:id="@+id/view_capacity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="28 TB"
-                android:textAlignment="viewEnd"
                 android:layout_weight="1"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                android:textColor="@color/light_olive"/>
+                android:fontFamily="sans-serif"
+                android:text="IAUSDY2r74687124y412536"
+                android:textAllCaps="true"
+                android:textColor="@color/light_olive"
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Объём:"
+                    android:textColor="@color/light_olive"
+                    android:textSize="16dp"
+                    android:layout_weight="1"/>
+
+
+                <TextView
+                    android:id="@+id/view_capacity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="28 TB"
+                    android:textAlignment="viewEnd"
+                    android:layout_weight="1"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/light_olive"/>
+
+            </LinearLayout>
         </LinearLayout>
 
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:id="@+id/button_page"
+            android:gravity="center"
+            android:columnCount="3"
+            android:layout_weight="1"
+            >
+            <ImageButton
+                android:id="@+id/act_more"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                />
+            <ImageButton
+                android:id="@+id/act_add_favorite"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                />
+        </GridLayout>
 
-    </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </ViewSwitcher>
+</LinearLayout>

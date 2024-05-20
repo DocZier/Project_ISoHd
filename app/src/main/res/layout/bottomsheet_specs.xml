@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bottomsheet_bg"
+    android:gravity="center_horizontal"
+    >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_weight="10"
+        android:paddingTop="15dp">
+
+        <ImageButton
+            android:id="@+id/act_add_favorite"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
+
+        <EditText
+            android:id="@+id/edit_modelname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif"
+            android:text="IAUSDY2r74687124y412536"
+            android:textAllCaps="true"
+            android:textColor="@color/light_olive"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            android:enabled="false"
+            android:background="@drawable/bottomsheet_bg"/>
+
+        <ImageButton
+            android:id="@+id/act_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:paddingTop="15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Объём:"
+            android:textColor="@color/light_olive"
+            android:textSize="20dp"
+            android:layout_weight="1"/>
+
+
+        <EditText
+            android:id="@+id/edit_capacity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="28000 GB"
+            android:textAlignment="viewEnd"
+            android:layout_weight="1"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:textColor="@color/light_olive"
+            android:enabled="false"
+            android:background="@drawable/bottomsheet_bg"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Интерфейс:"
+            android:textColor="@color/light_olive"
+            android:textSize="20dp"
+            android:layout_weight="1"/>
+
+
+        <EditText
+            android:id="@+id/edit_interface"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SATA 3.0"
+            android:textAlignment="viewEnd"
+            android:layout_weight="1"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:textColor="@color/light_olive"
+            android:enabled="false"
+            android:background="@drawable/bottomsheet_bg"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Производитель:"
+            android:textColor="@color/light_olive"
+            android:textSize="20dp"
+            android:layout_weight="1"/>
+
+
+        <EditText
+            android:id="@+id/edit_manufactor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Seagate"
+            android:textAlignment="viewEnd"
+            android:layout_weight="1"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:textColor="@color/light_olive"
+            android:enabled="false"
+            android:background="@drawable/bottomsheet_bg"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Форм-фактор:"
+            android:textColor="@color/light_olive"
+            android:textSize="20dp"
+            android:layout_weight="1"/>
+
+
+        <EditText
+            android:id="@+id/edit_formfactor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3.5"
+            android:textAlignment="viewEnd"
+            android:layout_weight="1"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:textColor="@color/light_olive"
+            android:enabled="false"
+            android:background="@drawable/bottomsheet_bg"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Скорость вращения:"
+            android:textColor="@color/light_olive"
+            android:textSize="20dp"
+            android:layout_weight="1"/>
+
+
+        <EditText
+            android:id="@+id/edit_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="13500"
+            android:textAlignment="viewEnd"
+            android:layout_weight="1"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:textColor="@color/light_olive"
+            android:enabled="false"
+            android:background="@drawable/bottomsheet_bg"
+            />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/act_save"
+        android:text="Применить"
+        android:textColor="@color/button_bg_text_color"
+        android:backgroundTint="@color/button_bg_color"
+        android:textSize="20dp"
+        android:layout_weight="1"
+        android:visibility="gone"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/act_clear"
+        android:text="Сбросить"
+        android:textColor="@color/button_bg_text_color"
+        android:backgroundTint="@color/button_bg_color"
+        android:textSize="20dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        />
+
+</LinearLayout>
