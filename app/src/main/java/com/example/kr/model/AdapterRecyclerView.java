@@ -3,6 +3,7 @@ package com.example.kr.model;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -50,7 +51,10 @@ public class AdapterRecyclerView extends RecyclerView.Adapter<AdapterRecyclerVie
             callback.onShowBottomSheet(hardDriveData);
         });
 
+        holder.favoriteButton.setImageResource(!hardDriveData.isFavorite() ? R.drawable.ic_bookmark_add : R.drawable.ic_bookmark_remove);
         holder.favoriteButton.setOnClickListener(v -> {
+            holder.favoriteButton.setImageResource(!hardDriveData.isFavorite() ? R.drawable.ic_bookmark_add : R.drawable.ic_bookmark_remove);
+
             callback.onAddToFavorites(hardDriveData);
         });
     }
@@ -70,7 +74,7 @@ public class AdapterRecyclerView extends RecyclerView.Adapter<AdapterRecyclerVie
         public TextView capacityTextView;
         public ViewSwitcher viewSwitcher;
         public LinearLayout infoLayout;
-        public LinearLayout buttonLayout;
+        public GridLayout buttonLayout;
         public ImageButton moreButton;
         public ImageButton favoriteButton;
 

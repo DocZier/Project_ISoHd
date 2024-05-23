@@ -19,7 +19,10 @@ import android.widget.MultiAutoCompleteTextView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -29,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import com.example.kr.R;
+import com.example.kr.activity.MainActivity;
 import com.example.kr.database.AppDatabase;
 import com.example.kr.database.HardDriveData;
 import com.example.kr.decorator.DecoratorRecyclerView;
@@ -36,57 +40,61 @@ import com.example.kr.dialog.FilterBottomSheetDialog;
 import com.example.kr.model.AdapterCallback;
 import com.example.kr.model.AdapterRecyclerView;
 import com.example.kr.model.HDDViewModel;
-import com.example.kr.web.WebPageParser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class DatabaseFragment extends Fragment implements AdapterCallback {
 
-    private String userId;
+    boolean isEdit = false;
+    private String userId = null;
     private HDDViewModel hddViewModel;
     private AdapterRecyclerView adapterRecyclerView;
     private RecyclerView recyclerView;
-    private ArrayList<String> selectedManufacturers = new ArrayList<>();
-    private double minCapacity = 0;
-    private double maxCapacity = Double.MAX_VALUE;
-    private boolean isCapacityInTb = false;
-    private ArrayList<String> selectedInterfaces = new ArrayList<>();
-    private ArrayList<String> selectedFormFactors = new ArrayList<>();
-    private int selectedSpeed = 0;
+    private ImageButton accountButton;
+
     public DatabaseFragment() {
-    }
-
-
-    public static DatabaseFragment newInstance()
-    {
-        DatabaseFragment fragment = new DatabaseFragment();
-        Bundle args = new Bundle();
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
+    }
+
+    public void updateFragment()
+    {
+        userId = null;
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)
+        {
+            userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View root = inflater.inflate(R.layout.fragment_database, container, false);
+        SearchView searchView = root.findViewById(R.id.search_bar);
 
         ImageButton syncButton = root.findViewById(R.id.act_sync);
         ImageButton filterButton = root.findViewById(R.id.act_filter);
+        accountButton = root.findViewById(R.id.act_account);
 
         recyclerView = root.findViewById(R.id.hdd_recycler_view);
         recyclerView.addItemDecoration(new DecoratorRecyclerView(10));
@@ -95,8 +103,26 @@ public class DatabaseFragment extends Fragment implements AdapterCallback {
         recyclerView.setAdapter(adapterRecyclerView);
 
         hddViewModel = new ViewModelProvider(this).get(HDDViewModel.class);
-        hddViewModel.getSortedDrivers().observe(getViewLifecycleOwner(), hardDriveDataList -> {
-            adapterRecyclerView.setHardDriveDataList(hardDriveDataList);
+        hddViewModel.getSortedDrivers().observe(getViewLifecycleOwner(), sortedDrivers -> {
+            adapterRecyclerView.setHardDriveDataList(sortedDrivers);
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                hddViewModel.searchHardDrives(query).observe(getViewLifecycleOwner(), filteredList -> {
+                    adapterRecyclerView.setHardDriveDataList(filteredList);
+                });
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                hddViewModel.searchHardDrives(newText).observe(getViewLifecycleOwner(), filteredList -> {
+                    adapterRecyclerView.setHardDriveDataList(filteredList);
+                });
+                return false;
+            }
         });
 
         syncButton.setOnClickListener(new View.OnClickListener() {
@@ -110,8 +136,19 @@ public class DatabaseFragment extends Fragment implements AdapterCallback {
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FilterBottomSheetDialog dialog = new FilterBottomSheetDialog(requireContext(), hddViewModel);
+                FilterBottomSheetDialog dialog = new FilterBottomSheetDialog(requireContext(), hddViewModel, false);
                 dialog.show();
+            }
+        });
+
+        accountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                if(userId != null)
+                    ((MainActivity) getActivity()).showAccountFragment();
+                else
+                    ((MainActivity) getActivity()).showLoginFragment();
             }
         });
 
@@ -125,70 +162,24 @@ public class DatabaseFragment extends Fragment implements AdapterCallback {
 
     @Override
     public void onAddToFavorites(HardDriveData hardDriveData) {
-        addToFavorites(userId, hardDriveData);
+        if (userId == null) {
+            Toast.makeText(getContext(), "Войдите в аккаунт", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (hardDriveData.isFavorite()) {
+            removeFromFavorites(hardDriveData);
+        } else {
+            addToFavorites(hardDriveData);
+        }
     }
 
     private void startParsing()
     {
-        ProgressBar progressBar = getActivity().findViewById(R.id.progress_bar);
-        progressBar.setVisibility(View.VISIBLE);
-        progressBar.setMax(5);
-
-        new Thread(new Runnable()
-        {
-            @Override
-            public void run() {
-                AppDatabase db = Room.databaseBuilder(getContext(), AppDatabase.class, "HDDDataBase.db").build();
-                WebPageParser WebPageParser = new WebPageParser();
-                try
-                {
-                    WebPageParser.getLinks();
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-                for (int i = 0; i < 5; i++)
-                {
-                    final int progress = i + 1;
-                    progressBar.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            progressBar.setProgress(progress);
-                        }
-                    });
-
-                    ArrayList<HardDriveData> driveData;
-                    try {
-                        driveData = WebPageParser.getData(i);
-                    } catch (IOException e)
-                    {
-                        e.printStackTrace();
-                        return;
-                    }
-                    try {
-                        Thread.sleep(new Random().nextInt(12500) + 2500);
-                    } catch (InterruptedException e)
-                    {
-                        e.printStackTrace();
-                    }
-                    for (HardDriveData j : driveData)
-                    {
-                        db.hardDriveDao().insertAll(j);
-                    }
-                }
-                progressBar.post(new Runnable()
-                {
-                    @Override
-                    public void run() {
-                        progressBar.setVisibility(View.INVISIBLE);
-                        progressBar.setProgress(0);
-                    }
-                });
-            }
-        }).start();
+        AppDatabase.loadHardDrivesFromXml(getContext());
     }
 
     private void showBottomSheet(HardDriveData hardDriveData) {
+
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext());
         bottomSheetDialog.setContentView(R.layout.bottomsheet_specs);
 
@@ -211,18 +202,34 @@ public class DatabaseFragment extends Fragment implements AdapterCallback {
         Button buttonSave = bottomSheetDialog.findViewById(R.id.act_save);
         Button buttonClear = bottomSheetDialog.findViewById(R.id.act_clear);
 
-        buttonFavorite.setOnClickListener(v -> addToFavorites(userId, hardDriveData));
+        if (userId == null) {
+            buttonFavorite.setVisibility(View.GONE);
+            buttonEdit.setVisibility(View.GONE);
+        } else {
+            buttonFavorite.setVisibility(View.VISIBLE);
+            buttonEdit.setVisibility(View.VISIBLE);
+        }
+
+        buttonFavorite.setOnClickListener(v -> {
+            buttonFavorite.setImageResource(!hardDriveData.isFavorite() ? R.drawable.ic_bookmark_add : R.drawable.ic_bookmark_remove);
+
+            onAddToFavorites(hardDriveData);
+        });
 
         buttonEdit.setOnClickListener(v -> {
-            modelEditText.setEnabled(true);
-            capacityEditText.setEnabled(true);
-            manufactorEditText.setEnabled(true);
-            interfaceEditText.setEnabled(true);
-            formfactorEditText.setEnabled(true);
-            speedEditText.setEnabled(true);
+            isEdit = !isEdit;
 
-            buttonSave.setVisibility(View.VISIBLE);
-            buttonClear.setVisibility(View.VISIBLE);
+            buttonEdit.setImageResource(!isEdit ? R.drawable.ic_edit_on : R.drawable.ic_edit_off);
+
+            modelEditText.setEnabled(isEdit);
+            capacityEditText.setEnabled(isEdit);
+            manufactorEditText.setEnabled(isEdit);
+            interfaceEditText.setEnabled(isEdit);
+            formfactorEditText.setEnabled(isEdit);
+            speedEditText.setEnabled(isEdit);
+
+            buttonSave.setVisibility(isEdit ? View.VISIBLE : View.GONE);
+            buttonClear.setVisibility(isEdit ? View.VISIBLE : View.GONE);
         });
 
         buttonSave.setOnClickListener(v -> {
@@ -230,7 +237,7 @@ public class DatabaseFragment extends Fragment implements AdapterCallback {
             hardDriveData.setCapacity(Double.parseDouble(capacityEditText.getText().toString()));
             hardDriveData.setManufactor(manufactorEditText.getText().toString());
             hardDriveData.setInterfc(interfaceEditText.getText().toString());
-            hardDriveData.setFormFactor(Double.parseDouble(formfactorEditText.getText().toString()));
+            hardDriveData.setFormFactor(formfactorEditText.getText().toString());
             hardDriveData.setSpeed(Integer.parseInt(speedEditText.getText().toString()));
 
             updateHardDriveData(hardDriveData);
@@ -243,45 +250,70 @@ public class DatabaseFragment extends Fragment implements AdapterCallback {
         bottomSheetDialog.show();
     }
 
-    public void addToFavorites(String userId, HardDriveData hardDriveData) {
+    public void addToFavorites(HardDriveData hardDriveData)
+    {
         DatabaseReference userRef = FirebaseDatabase
-                .getInstance("https://kr-project-69fc5-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                .getInstance("https://kr-project-69fc5-default-rtdb.asia-southeast1.firebasedatabase.app")
                 .getReference("users")
                 .child(userId).child("favorites");
 
-        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        hardDriveData.setFavorite(true);
+        updateHardDriveData(hardDriveData);
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DataSnapshot snapshot = task.getResult();
-                    ArrayList<HardDriveData> favorites = new ArrayList<>();
-                    for (DataSnapshot itemSnapshot : snapshot.getChildren()) {
-                        HardDriveData data = itemSnapshot.getValue(HardDriveData.class);
-                        favorites.add(data);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean isDuplicate = false;
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    HardDriveData existingHardDriveData = childSnapshot.getValue(HardDriveData.class);
+                    if (existingHardDriveData.uid == hardDriveData.uid) {
+                        isDuplicate = true;
+                        break;
                     }
-                    favorites.add(hardDriveData);
-
-                    userRef.setValue(favorites).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Log.d(TAG, "Item added to favorites.");
-                            } else {
-                                Log.w(TAG, "Failed to add item to favorites.", task.getException());
-                            }
-                        }
-                    });
-                } else {
-                    Log.w(TAG, "Failed to get favorites.", task.getException());
                 }
+
+                if (!isDuplicate) {
+
+                    String key = userRef.push().getKey();
+                    userRef.child(key).setValue(hardDriveData);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("Firebase", "failed to add");
             }
         });
     }
 
+    public void removeFromFavorites(HardDriveData hardDriveData)
+    {
+        DatabaseReference userRef = FirebaseDatabase
+                .getInstance("https://kr-project-69fc5-default-rtdb.asia-southeast1.firebasedatabase.app")
+                .getReference("users")
+                .child(userId).child("favorites");
+
+        hardDriveData.setFavorite(false);
+        updateHardDriveData(hardDriveData);
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    HardDriveData existingHardDriveData = childSnapshot.getValue(HardDriveData.class);
+                    if (existingHardDriveData.uid == hardDriveData.uid) {
+                        childSnapshot.getRef().removeValue();
+                        return;
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("Firebase", "failed to delete");
+            }
+        });
+    }
+
+
     private void updateHardDriveData(HardDriveData hardDriveData) {
-        new Thread(() -> {
-            AppDatabase db = Room.databaseBuilder(getContext(), AppDatabase.class, "HDDDataBase.db").build();
-            db.hardDriveDao().update(hardDriveData);
-        }).start();
+        AppDatabase.updateItem(getContext(), hardDriveData);
     }
 }

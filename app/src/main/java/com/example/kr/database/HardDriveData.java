@@ -19,20 +19,31 @@ public class HardDriveData
     @ColumnInfo(name = "Interface")
     private String interfc;
     @ColumnInfo(name = "FormFactor")
-    private double formFactor;
+    private String formFactor;
     @ColumnInfo(name = "RotatingSpeed")
     private int speed;
+    @ColumnInfo(name = "Favorite")
+    private boolean isFavorite;
 
     public HardDriveData()
     {}
 
-    public HardDriveData(String manufactor, String model, double capacity, String interfc, double formFactor, int speed) {
+    public HardDriveData(String manufactor, String model, double capacity, String interfc, String formFactor, int speed) {
         this.manufactor = manufactor;
         this.model = model;
         this.capacity = capacity;
         this.interfc = interfc;
         this.formFactor = formFactor;
         this.speed = speed;
+        this.isFavorite = false;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 
     public String getManufactor() {
@@ -67,11 +78,11 @@ public class HardDriveData
         this.interfc = interfc;
     }
 
-    public double getFormFactor() {
+    public String getFormFactor() {
         return formFactor;
     }
 
-    public void setFormFactor(double formFactor) {
+    public void setFormFactor(String formFactor) {
         this.formFactor = formFactor;
     }
 
@@ -81,5 +92,19 @@ public class HardDriveData
 
     public void setSpeed(int speed) {
         this.speed = speed;
+    }
+
+    @Override
+    public String toString() {
+        return "HardDriveData{" +
+                "uid=" + uid +
+                ", manufactor='" + manufactor + '\'' +
+                ", model='" + model + '\'' +
+                ", capacity=" + capacity +
+                ", interfc='" + interfc + '\'' +
+                ", formFactor='" + formFactor + '\'' +
+                ", speed=" + speed +
+                ", isFavorite=" + isFavorite +
+                '}';
     }
 }

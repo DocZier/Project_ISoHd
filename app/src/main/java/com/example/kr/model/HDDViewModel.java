@@ -5,8 +5,6 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Transformations;
 
 import com.example.kr.database.AppDatabase;
 import com.example.kr.database.HardDriveDao;
@@ -16,18 +14,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Function;
+import java.util.stream.Collectors;
 
-
-public class HDDViewModel extends AndroidViewModel
-{
+public class HDDViewModel extends AndroidViewModel {
     private HardDriveDao mDriveDao;
     private LiveData<List<HardDriveData>> Drivers;
     private LiveData<List<HardDriveData>> filteredDrivers;
     private final MediatorLiveData<List<HardDriveData>> sortedDrivers = new MediatorLiveData<>();
 
-    public HDDViewModel(Application application)
-    {
+    public HDDViewModel(Application application) {
         super(application);
         AppDatabase db = AppDatabase.getDatabase(application);
         mDriveDao = db.hardDriveDao();
@@ -39,11 +34,23 @@ public class HDDViewModel extends AndroidViewModel
             sortedList.sort(Comparator.comparingDouble(HardDriveData::getCapacity).reversed());
             sortedDrivers.setValue(sortedList);
         });
-
     }
 
-    public LiveData<List<HardDriveData>> getDrivers()
+    public void favoriteMode()
     {
+        sortedDrivers.removeSource(Drivers);
+
+        Drivers = mDriveDao.getFavorite();
+        filteredDrivers = mDriveDao.getFavorite();
+
+        sortedDrivers.addSource(Drivers, hardDriveData -> {
+            List<HardDriveData> sortedList = new ArrayList<>(hardDriveData);
+            sortedList.sort(Comparator.comparingDouble(HardDriveData::getCapacity).reversed());
+            sortedDrivers.setValue(sortedList);
+        });
+    }
+
+    public LiveData<List<HardDriveData>> getDrivers() {
         return Drivers;
     }
 
@@ -52,24 +59,24 @@ public class HDDViewModel extends AndroidViewModel
     }
 
     public void filterDrivers(ArrayList<String> manufactors, double minCapacity, double maxCapacity,
-                              ArrayList<String> interfaces, ArrayList<Double> formFactors,
-                              int minRotatingSpeed, int maxRotatingSpeed)
+                              ArrayList<Double> formFactors, int minRotatingSpeed, int maxRotatingSpeed,
+                              boolean favorite)
     {
-        filteredDrivers = mDriveDao.getFiltered(manufactors.toArray(new String[manufactors.size()]),
-                minCapacity, maxCapacity, //interfaces.toArray(new String[interfaces.size()]),
-                formFactors.toArray(new Double[formFactors.size()]), minRotatingSpeed, maxRotatingSpeed);
-
         sortedDrivers.removeSource(Drivers);
+        sortedDrivers.removeSource(filteredDrivers);
+
+        filteredDrivers = mDriveDao.getFiltered(manufactors.toArray(new String[manufactors.size()]),
+                    minCapacity, maxCapacity, formFactors.toArray(new Double[formFactors.size()]),
+                    minRotatingSpeed, maxRotatingSpeed, favorite);
 
         sortedDrivers.addSource(filteredDrivers, hardDriveData -> {
-            List<HardDriveData> sortedList = new ArrayList<>(hardDriveData);
-            sortedList.sort(Comparator.comparingDouble(HardDriveData::getCapacity).reversed());
-            sortedDrivers.setValue(sortedList);
+                List<HardDriveData> sortedList = new ArrayList<>(hardDriveData);
+                sortedList.sort(Comparator.comparingDouble(HardDriveData::getCapacity).reversed());
+                sortedDrivers.setValue(sortedList);
         });
     }
 
-    public void clearFilteredDrivers()
-    {
+    public void clearFilteredDrivers() {
         sortedDrivers.removeSource(filteredDrivers);
 
         sortedDrivers.addSource(Drivers, hardDriveData -> {
@@ -79,38 +86,26 @@ public class HDDViewModel extends AndroidViewModel
         });
     }
 
-    LiveData<List<HardDriveData>> getManufactors(String man)
-    {
-        return mDriveDao.findByManufactor(man);
+    public LiveData<List<HardDriveData>> searchHardDrives(String query) {
+        List<HardDriveData> filteredList = sortedDrivers.getValue().stream()
+                .filter(hardDriveData -> hardDriveData.getModel().toLowerCase().contains(query.toLowerCase()) ||
+                        hardDriveData.getManufactor().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+        MediatorLiveData<List<HardDriveData>> searchResults = new MediatorLiveData<>();
+        searchResults.setValue(filteredList);
+        return searchResults;
     }
 
-    LiveData<List<HardDriveData>> getCapacity(double min, double max)
-    {
-        return mDriveDao.findByCapacity(min, max);
-    }
-
-    LiveData<List<HardDriveData>> getInterface(String inter)
-    {
-        return mDriveDao.findByInterface(inter);
-    }
-
-    LiveData<List<HardDriveData>> getFormFactor(String ff)
-    {
-        return mDriveDao.findByFormFactor(ff);
-    }
-
-    public void insert(HardDriveData driver)
-    {
+    public void insert(HardDriveData driver) {
         mDriveDao.insert(driver);
     }
 
-    public void update(HardDriveData driver)
-    {
+    public void update(HardDriveData driver) {
         mDriveDao.update(driver);
     }
 
-    public void delete(HardDriveData driver)
-    {
+    public void delete(HardDriveData driver) {
         mDriveDao.delete(driver);
     }
+
 }

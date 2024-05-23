@@ -15,26 +15,22 @@ public interface HardDriveDao
 {
     @Query("SELECT * FROM hard_drives")
     LiveData<List<HardDriveData>> getAll();
+    @Query("SELECT * FROM hard_drives WHERE Favorite == 1")
+    LiveData<List<HardDriveData>> getFavorite();
+
     @Query("SELECT * FROM hard_drives WHERE uid IN (:userIds)")
     LiveData<List<HardDriveData>> loadAllByIds(int[] userIds);
-    @Query("SELECT * FROM hard_drives WHERE Manufactor LIKE :manufactor")
-    LiveData<List<HardDriveData>> findByManufactor(String manufactor);
-    @Query("SELECT * FROM hard_drives WHERE Capacity > :minCapacity AND Capacity < :maxCapacity")
-    LiveData<List<HardDriveData>> findByCapacity(double minCapacity, double maxCapacity);
-    @Query("SELECT * FROM hard_drives WHERE Interface LIKE :interfce")
-    LiveData<List<HardDriveData>> findByInterface(String interfce);
-    @Query("SELECT * FROM hard_drives WHERE FormFactor LIKE :formfactor")
-    LiveData<List<HardDriveData>> findByFormFactor(String formfactor);
+
     @Query("SELECT * FROM hard_drives WHERE " +
             "Manufactor IN (:manufactors) AND " +
             "Capacity BETWEEN :minCapacity AND :maxCapacity AND " +
-            //"Interface IN (:interfaces) AND " +
             "FormFactor IN (:formFactors) AND " +
-            "RotatingSpeed BETWEEN :minRotatingSpeed AND :maxRotatingSpeed")
+            "RotatingSpeed BETWEEN :minRotatingSpeed AND :maxRotatingSpeed AND " +
+            "Favorite == :isFavorite")
     LiveData<List<HardDriveData>> getFiltered(String[] manufactors, double minCapacity,
-                                              double maxCapacity, //String[] interfaces,
+                                              double maxCapacity,
                                               Double[] formFactors, int minRotatingSpeed,
-                                              int maxRotatingSpeed);
+                                              int maxRotatingSpeed, boolean isFavorite);
     @Query("SELECT * FROM hard_drives WHERE uid LIKE :id")
     LiveData<HardDriveData> findID(int id);
 

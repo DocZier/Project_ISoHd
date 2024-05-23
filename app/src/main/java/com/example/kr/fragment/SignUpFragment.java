@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kr.R;
+import com.example.kr.activity.MainActivity;
 import com.example.kr.database.HardDriveData;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -42,6 +43,7 @@ public class SignUpFragment extends Fragment {
     Button signupButton;
     FirebaseAuth mAuth;
     DatabaseReference mDatabase;
+    private boolean isLoggedIn = false;
 
     public SignUpFragment() {
     }
@@ -62,16 +64,16 @@ public class SignUpFragment extends Fragment {
         passwordEdit = root.findViewById(R.id.password_signup);
         signupButton = root.findViewById(R.id.signupButton);
 
-        TextView loginTextView = root.findViewById(R.id.loginText);
+        TextView signupTextView = root.findViewById(R.id.loginText);
+        TextView returnTextView = root.findViewById(R.id.returnText);
 
         signupButton.setEnabled(false);
 
-        // Add TextWatchers
         usernameEdit.addTextChangedListener(signupTextWatcher);
         emailEdit.addTextChangedListener(signupTextWatcher);
         passwordEdit.addTextChangedListener(signupTextWatcher);
 
-        loginTextView.setOnClickListener(new View.OnClickListener() {
+        signupTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -79,6 +81,14 @@ public class SignUpFragment extends Fragment {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragments_container, loginFragment, "login");
                 fragmentTransaction.commit();
+            }
+        });
+
+        returnTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                ((MainActivity) getActivity()).hideSignupFragment();
             }
         });
 
@@ -110,16 +120,21 @@ public class SignUpFragment extends Fragment {
                                     mDatabase.child("users").child(userId).setValue(userMap);
 
                                     Log.d(TAG, "createUserWithEmail:success");
-                                    getActivity().findViewById(R.id.fragments_container).setVisibility(GONE);
-                                    getActivity().findViewById(R.id.main_layout).setVisibility(VISIBLE);
+
+                                    isLoggedIn = true;
+
                                 } else {
                                     Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                    Toast.makeText(getActivity(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "Вход не выполнен.", Toast.LENGTH_SHORT).show();
+                                    isLoggedIn = false;
                                 }
                             }
                         });
+
+                ((MainActivity) getActivity()).hideSignupFragment();
             }
         });
+
         return root;
     }
 

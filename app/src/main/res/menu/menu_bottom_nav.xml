@@ -5,15 +5,18 @@
         android:id="@+id/itHome"
         app:showAsAction="ifRoom"
         android:title="Главная"
+        android:icon="@drawable/ic_home"
         />
     <item
         android:id="@+id/itFavorite"
         app:showAsAction="ifRoom"
         android:title="Избранное"
+        android:icon="@drawable/ic_bookmarks"
         />
     <item
         android:id="@+id/itInfo"
         app:showAsAction="ifRoom"
         android:title="Справка"
+        android:icon="@drawable/ic_info"
         />
 </menu>

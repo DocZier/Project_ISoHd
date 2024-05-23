@@ -13,7 +13,10 @@
         android:layout_height="wrap_content"
         android:inAnimation="@android:anim/slide_in_left"
         android:outAnimation="@android:anim/slide_out_right"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
         android:layout_weight="1">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -69,26 +72,28 @@
         </LinearLayout>
 
         <GridLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:padding="5dp"
             android:id="@+id/button_page"
             android:gravity="center"
-            android:columnCount="3"
-            android:layout_weight="1"
+            android:columnCount="2"
+            android:rowCount="1"
             >
             <ImageButton
                 android:id="@+id/act_more"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:src="@drawable/ic_more"
+                android:backgroundTint="@color/button_bg_color"
                 />
             <ImageButton
                 android:id="@+id/act_add_favorite"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:src="@drawable/ic_bookmark_add"
+                android:backgroundTint="@color/button_bg_color"
                 />
         </GridLayout>
 

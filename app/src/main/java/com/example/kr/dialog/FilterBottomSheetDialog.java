@@ -30,54 +30,47 @@ import java.util.Arrays;
 public class FilterBottomSheetDialog extends BottomSheetDialog {
 
     HDDViewModel hddViewModel;
+    private boolean isFavorite;
     private EditText etMinCapacity, etMaxCapacity, etMinRpm, etMaxRpm;
     private CheckBox cbSeagate, cbWD, cbSamsung, cbHitachi, cbToshiba;
-    private CheckBox cbSata1, cbSata2, cbSata3;
     private CheckBox cbFF2_5, cbFF3_5;
     private ArrayList<String> selectedManufacturers = new ArrayList<>();
-    private ArrayList<String> selectedInterfaces = new ArrayList<>();
     private ArrayList<Double> selectedFormFactors = new ArrayList<>();
 
     private ArrayList<String> Manufacturers = new ArrayList<>();
-    private ArrayList<String> Interfaces = new ArrayList<>();
     private ArrayList<Double> FormFactors = new ArrayList<>();
 
-    private TextView tvClearManufacturer, tvClearCapacity, tvClearInterface, tvClearFormFactor, tvClearRotationSpeed;
+    private TextView tvClearManufacturer, tvClearCapacity, tvClearFormFactor, tvClearRotationSpeed;
 
     private SharedPreferences sharedPrefs;
     private static final String PREFS_NAME = "filter_prefs";
-    public FilterBottomSheetDialog(Context context, HDDViewModel hddViewModel) {
+    public FilterBottomSheetDialog(Context context, HDDViewModel hddViewModel, boolean isFavorite)
+    {
         super(context);
         setContentView(R.layout.bottomsheet_filter);
         this.hddViewModel = hddViewModel;
+        this.isFavorite = isFavorite;
 
         etMinCapacity = findViewById(R.id.et_min_capacity);
         etMaxCapacity = findViewById(R.id.et_max_capacity);
         etMinRpm = findViewById(R.id.et_min_rpm);
         etMaxRpm = findViewById(R.id.et_max_rpm);
 
-        // Инициализация списков с дефолтными значениями
-        Manufacturers.addAll(Arrays.asList("Seagate", "Western Digital", "Samsung", "Hitachi", "Toshiba"));
-        Interfaces.addAll(Arrays.asList("SATA 1", "SATA 2", "SATA 3"));
+        Manufacturers.addAll(Arrays.asList("Seagate", "Western digital", "Samsung", "Hitachi", "Toshiba"));
         FormFactors.addAll(Arrays.asList(3.5, 2.5));
 
         sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
-        // Находим TextView для кнопок "Сбросить"
         tvClearManufacturer = findViewById(R.id.textview_clear_manufactor);
         tvClearCapacity = findViewById(R.id.textview_clear_capacity);
-        tvClearInterface = findViewById(R.id.textview_clear_interface);
         tvClearFormFactor = findViewById(R.id.textview_clear_form_factor);
         tvClearRotationSpeed = findViewById(R.id.textview_clear_rotation_speed);
 
-        // Устанавливаем слушателей для кнопок "Сбросить"
         tvClearManufacturer.setOnClickListener(v -> clearFilters("manufacturers"));
         tvClearCapacity.setOnClickListener(v -> clearFilters("capacity"));
-        tvClearInterface.setOnClickListener(v -> clearFilters("interfaces"));
         tvClearFormFactor.setOnClickListener(v -> clearFilters("formfactors"));
         tvClearRotationSpeed.setOnClickListener(v -> clearFilters("rotationspeed"));
 
-        // Обработчики CheckBox для производителей
          cbSeagate = findViewById(R.id.checkbox_seagate);
          cbWD = findViewById(R.id.checkbox_wdigital);
          cbSamsung = findViewById(R.id.checkbox_samsung);
@@ -85,23 +78,13 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
          cbToshiba = findViewById(R.id.checkbox_toshiba);
 
         cbSeagate.setOnCheckedChangeListener((buttonView, isChecked) -> updateFilterList(selectedManufacturers, "Seagate", isChecked));
-        cbWD.setOnCheckedChangeListener((buttonView, isChecked) -> updateFilterList(selectedManufacturers, "Western Digital", isChecked));
+        cbWD.setOnCheckedChangeListener((buttonView, isChecked) -> updateFilterList(selectedManufacturers, "Western digital", isChecked));
         cbSamsung.setOnCheckedChangeListener((buttonView, isChecked) -> updateFilterList(selectedManufacturers, "Samsung", isChecked));
         cbHitachi.setOnCheckedChangeListener((buttonView, isChecked) -> updateFilterList(selectedManufacturers, "Hitachi", isChecked));
         cbToshiba.setOnCheckedChangeListener((buttonView, isChecked) -> updateFilterList(selectedManufacturers, "Toshiba", isChecked));
 
-        // Обработчики CheckBox для интерфейсов
-         cbSata1 = findViewById(R.id.checkbox_sata1);
-         cbSata2 = findViewById(R.id.checkbox_sata2);
-         cbSata3 = findViewById(R.id.checkbox_sata3);
-
-        cbSata1.setOnCheckedChangeListener((buttonView, isChecked) -> updateFilterList(selectedInterfaces, "SATA 1", isChecked));
-        cbSata2.setOnCheckedChangeListener((buttonView, isChecked) -> updateFilterList(selectedInterfaces, "SATA 2", isChecked));
-        cbSata3.setOnCheckedChangeListener((buttonView, isChecked) -> updateFilterList(selectedInterfaces, "SATA 3", isChecked));
-
-        // Обработчики CheckBox для форм-факторов
-         cbFF2_5 = findViewById(R.id.checkbox_ff_2_5);
-         cbFF3_5 = findViewById(R.id.checkbox_ff_3_5);
+        cbFF2_5 = findViewById(R.id.checkbox_ff_2_5);
+        cbFF3_5 = findViewById(R.id.checkbox_ff_3_5);
 
         cbFF2_5.setOnCheckedChangeListener((buttonView, isChecked) -> updateFilterList(selectedFormFactors, "3.5", isChecked, 0));
         cbFF3_5.setOnCheckedChangeListener((buttonView, isChecked) -> updateFilterList(selectedFormFactors, "2.5", isChecked, 0));
@@ -122,21 +105,14 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
 
                 if(selectedManufacturers.isEmpty())
                     selectedManufacturers = Manufacturers;
-                if(selectedInterfaces.isEmpty())
-                    selectedInterfaces = Interfaces;
+
                 if(selectedFormFactors.isEmpty())
                     selectedFormFactors = FormFactors;
-
-                Log.i("Info",minCapacity + "-" + maxCapacity + "\n" +
-                        minRpm + "-" + maxRpm + "\n" +
-                        selectedManufacturers + "\n" +
-                        selectedInterfaces + "\n" +
-                        selectedFormFactors);
 
                 saveFilterState();
 
                 hddViewModel.filterDrivers(selectedManufacturers, minCapacity, maxCapacity,
-                        selectedInterfaces, selectedFormFactors, minRpm, maxRpm);
+                        selectedFormFactors, minRpm, maxRpm, isFavorite);
 
                 dismiss();
             }
@@ -176,10 +152,6 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
         editor.putBoolean("checkbox_hitachi", cbHitachi.isChecked());
         editor.putBoolean("checkbox_toshiba", cbToshiba.isChecked());
 
-        editor.putBoolean("checkbox_sata1", cbSata1.isChecked());
-        editor.putBoolean("checkbox_sata2", cbSata2.isChecked());
-        editor.putBoolean("checkbox_sata3", cbSata3.isChecked());
-
         editor.putBoolean("checkbox_ff25", cbFF2_5.isChecked());
         editor.putBoolean("checkbox_ff35", cbFF3_5.isChecked());
 
@@ -199,10 +171,6 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
         cbSamsung.setChecked(sharedPrefs.getBoolean("checkbox_samsung", false));
         cbHitachi.setChecked(sharedPrefs.getBoolean("checkbox_hitachi", false));
         cbToshiba.setChecked(sharedPrefs.getBoolean("checkbox_toshiba", false));
-
-        cbSata1.setChecked(sharedPrefs.getBoolean("checkbox_sata1", false));
-        cbSata2.setChecked(sharedPrefs.getBoolean("checkbox_sata2", false));
-        cbSata3.setChecked(sharedPrefs.getBoolean("checkbox_sata3", false));
 
         cbFF2_5.setChecked(sharedPrefs.getBoolean("checkbox_ff25", false));
         cbFF3_5.setChecked(sharedPrefs.getBoolean("checkbox_ff35", false));
@@ -334,18 +302,6 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
                 etMinCapacity.setText("");
                 etMaxCapacity.setText("");
                 break;
-            case "interfaces":
-                selectedInterfaces.clear();
-
-                // Сброс CheckBox для интерфейсов
-                LinearLayout interfacesLinearLayout = findViewById(R.id.interface_linear_layout);
-                for (int i = 0; i < interfacesLinearLayout.getChildCount(); i++) {
-                    View child = interfacesLinearLayout.getChildAt(i);
-                    if (child instanceof CheckBox) {
-                        ((CheckBox) child).setChecked(false);
-                    }
-                }
-                break;
             case "formfactors":
                 selectedFormFactors.clear();
                 // Сброс CheckBox для форм-факторов
@@ -373,9 +329,6 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
         findViewById(R.id.textview_clear_capacity).setVisibility(
                 !etMinCapacity.getText().toString().isEmpty() || !etMaxCapacity.getText().toString().isEmpty() ?
                         View.VISIBLE : View.GONE);
-        findViewById(R.id.textview_clear_interface).setVisibility(
-                !selectedInterfaces.isEmpty() ?
-                View.VISIBLE : View.GONE);
         findViewById(R.id.textview_clear_form_factor).setVisibility(
                 !selectedFormFactors.isEmpty() ?
                         View.VISIBLE : View.GONE);

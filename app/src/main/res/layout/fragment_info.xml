@@ -1,17 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.InfoFragment">
+    android:orientation="vertical"
+    tools:context=".fragment.InfoFragment"
+    android:background="@color/light_olive"
+    android:gravity="center">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="WIP INFO"
-        android:textSize="20dp"
-        android:gravity="center"/>
+        android:layout_weight="1"
+        android:padding="16dp">
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Основные характеристики жёстких дисков"
+                android:textStyle="bold"
+                android:textSize="34dp"
+                android:textColor="@color/light_marine"
+                android:paddingBottom="8dp" />
+
+            <TextView
+                android:id="@+id/capacityTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Объём"
+                android:textStyle="bold"
+                android:textSize="26dp"
+                android:textColor="@color/light_marine"
+                android:paddingTop="8dp"
+                android:paddingBottom="4dp" />
+
+            <TextView
+                android:id="@+id/capacityDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Объём"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="@android:color/black"
+                android:paddingBottom="8dp" />
+
+            <TextView
+                android:id="@+id/interfaceTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Интерфейс"
+                android:textStyle="bold"
+                android:textSize="26dp"
+                android:textColor="@color/light_marine"
+                android:paddingTop="8dp"
+                android:paddingBottom="4dp" />
+
+            <TextView
+                android:id="@+id/interfaceDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Жёсткие диски подключаются к компьютеру с помощью интерфейса. Основные типы интерфейсов: SATA (версии 1, 2, 3), которые обеспечивают разные скорости передачи данных. Например, SATA 3.0 имеет скорость до 6 Гбит/с."
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="@android:color/black"
+                android:paddingBottom="8dp" />
+
+            <TextView
+                android:id="@+id/formFactorTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Форм-фактор"
+                android:textStyle="bold"
+                android:textSize="26dp"
+                android:textColor="@color/light_marine"
+                android:paddingTop="8dp"
+                android:paddingBottom="4dp" />
+
+            <TextView
+                android:id="@+id/formFactorDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="Форм-фактор жёсткого диска определяется его физическим размером. Наиболее распространённые форм-факторы: 3.5 дюйма для настольных ПК и 2.5 дюйма для ноутбуков."
+                android:textColor="@android:color/black"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/spindleSpeedTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Скорость вращения шпинделя"
+                android:textStyle="bold"
+                android:textSize="26dp"
+                android:textColor="@color/light_marine"
+                android:paddingTop="8dp"
+                android:paddingBottom="4dp" />
+
+            <TextView
+                android:id="@+id/spindleSpeedDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Скорость вращения шпинделя жёсткого диска измеряется в оборотах в минуту (RPM). Наиболее распространённые скорости: 5400 RPM и 7200 RPM."
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="@android:color/black"
+                android:paddingBottom="8dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabScrollToTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        android:src="@android:drawable/ic_menu_upload"
+        android:backgroundTint="@color/light_marine"
+        android:contentDescription="Вверх" />
+
+</FrameLayout>

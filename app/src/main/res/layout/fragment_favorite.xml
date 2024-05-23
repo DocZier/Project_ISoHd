@@ -1,17 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_favorite"
     tools:context=".fragment.FavoriteFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ViewSwitcher
+        android:id="@+id/viewSwitcher"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="WIP FAVORITE"
-        android:textSize="20dp"
-        android:gravity="center"/>
+        android:clickable="false"
+        android:layout_weight="1">
 
+        <LinearLayout
+            android:id="@+id/login_register_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Пожалуйста, войдите в аккаунт или зарегистрируйтесь"
+                android:textColor="@color/light_marine"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:layout_marginBottom="16dp" />
+
+            <Button
+                android:id="@+id/login_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Войти"
+                android:textColor="@color/light_olive"
+                android:backgroundTint="@color/light_marine"/>
+
+            <Button
+                android:id="@+id/signup_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Зарегистрироваться"
+                android:textColor="@color/light_olive"
+                android:backgroundTint="@color/light_marine"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="15dp"
+            android:id="@+id/content"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/act_sync"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:src="@drawable/ic_sync"
+                    android:backgroundTint="@color/button_bg_text_color"
+                    />
+
+                <ImageButton
+                    android:id="@+id/act_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:src="@drawable/ic_account"
+                    android:backgroundTint="@color/button_bg_text_color"
+                    />
+
+                <SearchView
+                    android:id="@+id/search_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/layout_bg"
+                    android:queryHint="Поиск"
+                    />
+                <ImageButton
+                    android:id="@+id/act_filter"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:src="@drawable/ic_filter"
+                    android:backgroundTint="@color/button_bg_text_color"
+                    />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/hdd_recycler_view"
+                android:layout_margin="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="5"
+                />
+
+            <TextView
+                android:id="@+id/empty_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Здесь пока пусто"
+                android:layout_weight="5"
+                android:visibility="gone"
+                />
+
+        </LinearLayout>
+    </ViewSwitcher>
 </LinearLayout>

@@ -1,6 +1,7 @@
 package com.example.kr.database;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -8,23 +9,27 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.kr.web.WebPageParser;
+import com.example.kr.R;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-@Database(entities = {HardDriveData.class}, version = 3, exportSchema = false)
+@Database(entities = {HardDriveData.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase
 {
     public abstract HardDriveDao hardDriveDao();
     private static volatile AppDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
-    static final ExecutorService databaseWriteExecutor =
-            Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+    static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
     public static AppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
@@ -46,33 +51,60 @@ public abstract class AppDatabase extends RoomDatabase
                 HardDriveDao dao = INSTANCE.hardDriveDao();
                 dao.deleteAll();
 
-                WebPageParser webPageParser = new WebPageParser();
-
-                try {
-                    webPageParser.getLinks();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-
-                for(int i=0;i<5;i++)
-                {
-                    ArrayList<HardDriveData> driveData;
-                    try
-                    {
-                        driveData = webPageParser.getData(i);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    try {
-                        Thread.sleep(new Random().nextInt(12500)+2500);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-
-                    for(HardDriveData j: driveData)
-                        dao.insertAll(j);
-                }
             });
         }
     };
+
+    public static void loadHardDrivesFromXml(final Context context) {
+        databaseWriteExecutor.execute(() -> {
+
+            HardDriveDao dao = INSTANCE.hardDriveDao();
+            dao.deleteAll();
+
+            try {
+                ArrayList<HardDriveData> hardDrives = new ArrayList<>();
+
+                String[] hardDriveStrings = context.getResources().getStringArray(R.array.hard_drives_data);
+
+                for (String hardDriveString : hardDriveStrings) {
+                    String[] parts = hardDriveString.split(",");
+                    if (parts.length == 6)
+                    {
+                        HardDriveData hardDrive = new HardDriveData(
+                                parts[0],
+                                parts[1],
+                                Double.parseDouble(parts[2]),
+                                parts[3],
+                                parts[4],
+                                Integer.parseInt(parts[5])
+                        );
+                        hardDrives.add(hardDrive);
+                    }
+                }
+
+                dao.deleteAll();
+                dao.insertAll(hardDrives.toArray(new HardDriveData[hardDrives.size()]));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public static void updateItem(final Context context, HardDriveData hardDriveData) {
+        databaseWriteExecutor.execute(() -> {
+
+            HardDriveDao dao = INSTANCE.hardDriveDao();
+
+            try {
+                dao.update(hardDriveData);
+                Log.d("DriveData", hardDriveData.toString());
+
+            } catch (Exception e) {
+
+                Log.e("Database", "Error", e);
+                e.printStackTrace();
+            }
+        });
+    }
 }

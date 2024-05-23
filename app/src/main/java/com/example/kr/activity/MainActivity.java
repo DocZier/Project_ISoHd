@@ -3,6 +3,7 @@ package com.example.kr.activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ViewSwitcher;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +13,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.kr.R;
+import com.example.kr.fragment.AccountFragment;
 import com.example.kr.fragment.LoginFragment;
+import com.example.kr.fragment.SignUpFragment;
 import com.example.kr.model.AdapterViewPager;
 import com.example.kr.fragment.DatabaseFragment;
 import com.example.kr.fragment.FavoriteFragment;
@@ -29,18 +32,7 @@ public class MainActivity extends AppCompatActivity {
     ViewPager2 pagerMain;
     ArrayList<Fragment> fragments = new ArrayList<>();
     BottomNavigationView navigationView;
-    private FirebaseAuth mAuth;
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser == null){
-            showLoginFragment();
-        }
-    }
+    ViewSwitcher viewSwitcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -48,10 +40,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mAuth = FirebaseAuth.getInstance();
-
         pagerMain = findViewById(R.id.pagerMain);
         navigationView = findViewById(R.id.bottomNav);
+        viewSwitcher = findViewById(R.id.view_switcher);
 
         fragments.add(new DatabaseFragment());
         fragments.add(new FavoriteFragment());
@@ -96,26 +87,71 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showLoginFragment() {
-        pagerMain.setVisibility(View.GONE);
-        navigationView.setVisibility(View.GONE);
+        viewSwitcher.showNext();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragments_container, new LoginFragment(), "login");
         fragmentTransaction.commit();
 
-        findViewById(R.id.fragments_container).setVisibility(View.VISIBLE);
     }
 
     public void hideLoginFragment() {
-        findViewById(R.id.fragments_container).setVisibility(View.GONE);
+        viewSwitcher.showNext();
 
         Fragment loginFragment = getSupportFragmentManager().findFragmentByTag("login");
         if (loginFragment != null) {
             getSupportFragmentManager().beginTransaction().remove(loginFragment).commit();
         }
 
-        pagerMain.setVisibility(View.VISIBLE);
-        navigationView.setVisibility(View.VISIBLE);
+        ((DatabaseFragment) fragments.get(0)).updateFragment();
+        ((FavoriteFragment) fragments.get(1)).updateFragment();
     }
+
+    public void showSignupFragment() {
+        viewSwitcher.showNext();
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragments_container, new SignUpFragment(), "signup");
+        fragmentTransaction.commit();
+
+    }
+
+    public void hideSignupFragment() {
+        viewSwitcher.showNext();
+
+        Fragment loginFragment = getSupportFragmentManager().findFragmentByTag("signup");
+        if (loginFragment != null) {
+            getSupportFragmentManager().beginTransaction().remove(loginFragment).commit();
+        }
+
+        ((DatabaseFragment) fragments.get(0)).updateFragment();
+        ((FavoriteFragment) fragments.get(1)).updateFragment();
+    }
+
+    public void showAccountFragment() {
+        viewSwitcher.showNext();
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragments_container, new AccountFragment(), "account");
+        fragmentTransaction.commit();
+
+
+    }
+
+    public void hideAccountFragment()
+    {
+        viewSwitcher.showNext();
+
+        Fragment accountFragment = getSupportFragmentManager().findFragmentByTag("account");
+        if (accountFragment != null) {
+            getSupportFragmentManager().beginTransaction().remove(accountFragment).commit();
+        }
+
+        ((DatabaseFragment) fragments.get(0)).updateFragment();
+        ((FavoriteFragment) fragments.get(1)).updateFragment();
+    }
+
 }

@@ -102,7 +102,8 @@ public class LoginFragment extends Fragment {
 
         returnTextView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 ((MainActivity) getActivity()).hideLoginFragment();
             }
         });

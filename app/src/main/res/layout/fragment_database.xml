@@ -34,6 +34,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
+                android:src="@drawable/ic_sync"
+                android:backgroundTint="@color/button_bg_text_color"
+                />
+
+            <ImageButton
+                android:id="@+id/act_account"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:src="@drawable/ic_account"
+                android:backgroundTint="@color/button_bg_text_color"
                 />
 
             <SearchView
@@ -41,14 +52,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/layout_bg"/>
+                android:background="@drawable/layout_bg"
+                android:queryHint="Поиск"/>
 
             <ImageButton
                 android:id="@+id/act_filter"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
+                android:src="@drawable/ic_filter"
+                android:backgroundTint="@color/button_bg_text_color"
                 />
+
+
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -58,8 +74,8 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_weight="5"
-
             />
+
     </LinearLayout>
 
 </LinearLayout>
