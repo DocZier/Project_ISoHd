@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.MainMenuFragment">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.45">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/bottomsheet_item_bg"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Главное меню"
+                android:textAlignment="center"
+                android:textColor="@color/light_marine"
+                android:textSize="36sp"
+                android:textStyle="bold"/>
+
+            <Button
+                android:id="@+id/hdd_db_button"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="15dp"
+                android:backgroundTint="@color/light_olive"
+                android:text="Жёсткие диски"
+                app:strokeWidth="2dp"
+                app:strokeColor="@color/light_marine"
+                app:cornerRadius="8dp"
+                android:textColor="@color/light_marine"
+                android:textSize="18sp" />
+            <Button
+                android:id="@+id/account_button"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="15dp"
+                android:backgroundTint="@color/light_olive"
+                app:strokeWidth="2dp"
+                app:strokeColor="@color/light_marine"
+                app:cornerRadius="8dp"
+                android:text="Профиль"
+                android:textColor="@color/light_marine"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/settings_button"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="15dp"
+                android:backgroundTint="@color/light_olive"
+                android:text="Настройки"
+                app:strokeWidth="2dp"
+                app:strokeColor="@color/light_marine"
+                app:cornerRadius="8dp"
+                android:textColor="@color/light_marine"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/info_button"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="15dp"
+                android:backgroundTint="@color/light_olive"
+                android:text="Справка"
+                app:strokeWidth="2dp"
+                app:strokeColor="@color/light_marine"
+                app:cornerRadius="8dp"
+                android:textColor="@color/light_marine"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/map_button"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="15dp"
+                android:backgroundTint="@color/light_olive"
+                android:text="(???)Карты"
+                app:strokeWidth="2dp"
+                app:strokeColor="@color/light_marine"
+                app:cornerRadius="8dp"
+                android:textColor="@color/light_marine"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

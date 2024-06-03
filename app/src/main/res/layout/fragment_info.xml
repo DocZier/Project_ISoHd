@@ -13,8 +13,8 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:layout_marginBottom="50dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,17 +43,50 @@
                 android:paddingBottom="4dp" />
 
             <TextView
-                android:id="@+id/capacityDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Объём"
-                android:textStyle="bold"
-                android:textSize="20dp"
+                android:paddingBottom="8dp"
+                android:text="@string/capacity_annotation"
+                android:textAlignment="textStart"
                 android:textColor="@android:color/black"
-                android:paddingBottom="8dp" />
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/interfaceTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="@string/capacity_first"
+                android:textAlignment="textStart"
+                android:textColor="@android:color/black"
+                android:textSize="20dp"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="@string/capacity_second"
+                android:textAlignment="textStart"
+                android:textColor="@android:color/black"
+                android:textSize="20dp"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="@string/capacity_third"
+                android:textAlignment="textStart"
+                android:textColor="@android:color/black"
+                android:textSize="20dp"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold" />
+
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Интерфейс"
@@ -64,14 +97,45 @@
                 android:paddingBottom="4dp" />
 
             <TextView
-                android:id="@+id/interfaceDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Жёсткие диски подключаются к компьютеру с помощью интерфейса. Основные типы интерфейсов: SATA (версии 1, 2, 3), которые обеспечивают разные скорости передачи данных. Например, SATA 3.0 имеет скорость до 6 Гбит/с."
+                android:text="@string/interface_annotation"
                 android:textStyle="bold"
                 android:textSize="20dp"
                 android:textColor="@android:color/black"
                 android:paddingBottom="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="@string/interface_first"
+                android:textAlignment="textStart"
+                android:textColor="@android:color/black"
+                android:textSize="20dp"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="@string/interface_second"
+                android:textAlignment="textStart"
+                android:textColor="@android:color/black"
+                android:textSize="20dp"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="@string/interface_third"
+                android:textAlignment="textStart"
+                android:textColor="@android:color/black"
+                android:textSize="20dp"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/formFactorTitle"
@@ -85,17 +149,37 @@
                 android:paddingBottom="4dp" />
 
             <TextView
-                android:id="@+id/formFactorDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/formfactor_annotation"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="@android:color/black"
+                android:paddingBottom="8dp" />
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="8dp"
-                android:text="Форм-фактор жёсткого диска определяется его физическим размером. Наиболее распространённые форм-факторы: 3.5 дюйма для настольных ПК и 2.5 дюйма для ноутбуков."
+                android:text="@string/formfactor_first"
+                android:textAlignment="textStart"
                 android:textColor="@android:color/black"
                 android:textSize="20dp"
+                android:layout_marginStart="10dp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/spindleSpeedTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="@string/formfactor_second"
+                android:textAlignment="textStart"
+                android:textColor="@android:color/black"
+                android:textSize="20dp"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold" />
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Скорость вращения шпинделя"
@@ -106,14 +190,68 @@
                 android:paddingBottom="4dp" />
 
             <TextView
-                android:id="@+id/spindleSpeedDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Скорость вращения шпинделя жёсткого диска измеряется в оборотах в минуту (RPM). Наиболее распространённые скорости: 5400 RPM и 7200 RPM."
+                android:text="@string/speed_annotation"
                 android:textStyle="bold"
                 android:textSize="20dp"
                 android:textColor="@android:color/black"
                 android:paddingBottom="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="@string/speed_first"
+                android:textAlignment="textStart"
+                android:textColor="@android:color/black"
+                android:textSize="20dp"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="@string/speed_second"
+                android:textAlignment="textStart"
+                android:textColor="@android:color/black"
+                android:textSize="20dp"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="@string/speed_third"
+                android:textAlignment="textStart"
+                android:textColor="@android:color/black"
+                android:textSize="20dp"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="@string/speed_third"
+                android:textAlignment="textStart"
+                android:textColor="@android:color/black"
+                android:textSize="20dp"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="@string/speed_forth"
+                android:textAlignment="textStart"
+                android:textColor="@android:color/black"
+                android:textSize="20dp"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold" />
         </LinearLayout>
     </ScrollView>
 
@@ -124,6 +262,7 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         android:visibility="gone"
+        android:alpha="0.5"
         android:src="@android:drawable/ic_menu_upload"
         android:backgroundTint="@color/light_marine"
         android:contentDescription="Вверх" />

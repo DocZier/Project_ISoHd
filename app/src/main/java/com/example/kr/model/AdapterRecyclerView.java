@@ -44,19 +44,9 @@ public class AdapterRecyclerView extends RecyclerView.Adapter<AdapterRecyclerVie
         holder.capacityTextView.setText(capacity / 1000 > 0 ? (capacity / 1000 + " TB") : (capacity + " GB"));
 
         holder.itemView.setOnClickListener(v -> {
-            holder.viewSwitcher.showNext();
-        });
-
-        holder.moreButton.setOnClickListener(v -> {
             callback.onShowBottomSheet(hardDriveData);
         });
 
-        holder.favoriteButton.setImageResource(!hardDriveData.isFavorite() ? R.drawable.ic_bookmark_add : R.drawable.ic_bookmark_remove);
-        holder.favoriteButton.setOnClickListener(v -> {
-            holder.favoriteButton.setImageResource(!hardDriveData.isFavorite() ? R.drawable.ic_bookmark_add : R.drawable.ic_bookmark_remove);
-
-            callback.onAddToFavorites(hardDriveData);
-        });
     }
 
     @Override
@@ -74,8 +64,6 @@ public class AdapterRecyclerView extends RecyclerView.Adapter<AdapterRecyclerVie
         public TextView capacityTextView;
         public ViewSwitcher viewSwitcher;
         public LinearLayout infoLayout;
-        public GridLayout buttonLayout;
-        public ImageButton moreButton;
         public ImageButton favoriteButton;
 
         public ViewHolder(View itemView) {
@@ -84,8 +72,6 @@ public class AdapterRecyclerView extends RecyclerView.Adapter<AdapterRecyclerVie
             this.capacityTextView = itemView.findViewById(R.id.view_capacity);
             this.viewSwitcher = itemView.findViewById(R.id.viewSwitcher);
             this.infoLayout = itemView.findViewById(R.id.unit);
-            this.buttonLayout = itemView.findViewById(R.id.button_page);
-            this.moreButton = itemView.findViewById(R.id.act_more);
             this.favoriteButton = itemView.findViewById(R.id.act_add_favorite);
         }
     }

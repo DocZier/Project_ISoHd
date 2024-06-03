@@ -5,7 +5,8 @@ import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-public class DecoratorRecyclerView extends RecyclerView.ItemDecoration {
+public class DecoratorRecyclerView extends RecyclerView.ItemDecoration
+{
     private int space;
 
     public DecoratorRecyclerView(int space)

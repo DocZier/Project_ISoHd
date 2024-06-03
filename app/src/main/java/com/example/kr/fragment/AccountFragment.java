@@ -2,28 +2,71 @@ package com.example.kr.fragment;
 
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.example.kr.R;
 import com.example.kr.activity.MainActivity;
+import com.example.kr.model.AdapterRecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class AccountFragment extends Fragment
 {
-    private FirebaseAuth mAuth;
+    private String userId = null;
+    private ViewSwitcher currentViewSwitcher = null;
+    private View firstView;
+    private View secondView;
     public AccountFragment() {
+        userId = null;
+
+        if(currentViewSwitcher!=null)
+            changeView();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)
+        {
+            userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        }
+    }
+
+    public void updateFragment()
+    {
+        if(currentViewSwitcher!=null)
+            changeView();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)
+        {
+            userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
+        else
+            userId = null;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)
+        {
+            userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                ((MainActivity) getActivity()).setCurrentPage(0);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     @Override
@@ -31,25 +74,84 @@ public class AccountFragment extends Fragment
     {
         View root = inflater.inflate(R.layout.fragment_account, container, false);
 
-        Button returnButton = root.findViewById(R.id.return_button);
+        currentViewSwitcher = root.findViewById(R.id.viewSwitcher);
+
+        firstView = root.findViewById(R.id.login_register_view);
+        secondView = root.findViewById(R.id.account_view);
+
         Button logoutButton = root.findViewById(R.id.logout_button);
 
         TextView usernameText = root.findViewById(R.id.username);
 
-        returnButton.setOnClickListener(new View.OnClickListener() {
+        changeView();
+
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            usernameText.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        }
+
+        Button loginButton = root.findViewById(R.id.login_button);
+        Button signupButton = root.findViewById(R.id.signup_button);
+        Button historyButton = root.findViewById(R.id.history_button);
+        Button statisticButton = root.findViewById(R.id.stat_button);
+        Button favoritesButton = root.findViewById(R.id.favorite_button);
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getActivity()).hideAccountFragment();
+                ((MainActivity) getActivity()).showFragment("login");
+            }
+        });
+
+        signupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).showFragment("signup");
+            }
+        });
+
+        favoritesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).showFragment("favorite");
+            }
+        });
+
+        historyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).showFragment("history");
+            }
+        });
+
+        statisticButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //((MainActivity) getActivity()).showFragment("stat");
+                Toast.makeText(requireContext(), "Статистика", Toast.LENGTH_SHORT);
             }
         });
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuth.signOut();
-                ((MainActivity) getActivity()).hideAccountFragment();
+                FirebaseAuth.getInstance().signOut();
+                changeView();
             }
         });
         return root;
+    }
+
+    private void changeView()
+    {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)
+        {
+            if (currentViewSwitcher.getCurrentView() == firstView)
+                currentViewSwitcher.showNext();
+        }
+        else
+        {
+            if (currentViewSwitcher.getCurrentView() == secondView)
+                currentViewSwitcher.showPrevious();
+        }
     }
 }

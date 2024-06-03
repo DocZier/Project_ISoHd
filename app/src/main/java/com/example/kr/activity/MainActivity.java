@@ -14,7 +14,11 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.kr.R;
 import com.example.kr.fragment.AccountFragment;
+import com.example.kr.fragment.HistoryFragment;
 import com.example.kr.fragment.LoginFragment;
+import com.example.kr.fragment.MainMenuFragment;
+import com.example.kr.fragment.MapFragment;
+import com.example.kr.fragment.SettingsFragment;
 import com.example.kr.fragment.SignUpFragment;
 import com.example.kr.model.AdapterViewPager;
 import com.example.kr.fragment.DatabaseFragment;
@@ -33,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Fragment> fragments = new ArrayList<>();
     BottomNavigationView navigationView;
     ViewSwitcher viewSwitcher;
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,9 +49,9 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.bottomNav);
         viewSwitcher = findViewById(R.id.view_switcher);
 
-        fragments.add(new DatabaseFragment());
-        fragments.add(new FavoriteFragment());
-        fragments.add(new InfoFragment());
+        fragments.add(new MainMenuFragment());
+        fragments.add(new AccountFragment());
+        fragments.add(new SettingsFragment());
 
         AdapterViewPager adapterViewPager = new AdapterViewPager(this, fragments);
 
@@ -61,10 +66,10 @@ public class MainActivity extends AppCompatActivity {
                         navigationView.setSelectedItemId(R.id.itHome);
                         break;
                     case 1:
-                        navigationView.setSelectedItemId(R.id.itFavorite);
+                        navigationView.setSelectedItemId(R.id.itAccount);
                         break;
                     case 2:
-                        navigationView.setSelectedItemId(R.id.itInfo);
+                        navigationView.setSelectedItemId(R.id.itSettings);
                         break;
                 }
                 super.onPageSelected(position);
@@ -76,9 +81,9 @@ public class MainActivity extends AppCompatActivity {
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.itHome) {
                     pagerMain.setCurrentItem(0);
-                } else if (itemId == R.id.itFavorite) {
+                } else if (itemId == R.id.itAccount) {
                     pagerMain.setCurrentItem(1);
-                } else if (itemId == R.id.itInfo) {
+                } else if (itemId == R.id.itSettings) {
                     pagerMain.setCurrentItem(2);
                 }
                 return true;
@@ -86,72 +91,73 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void showLoginFragment() {
-        viewSwitcher.showNext();
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragments_container, new LoginFragment(), "login");
-        fragmentTransaction.commit();
-
-    }
-
-    public void hideLoginFragment() {
-        viewSwitcher.showNext();
-
-        Fragment loginFragment = getSupportFragmentManager().findFragmentByTag("login");
-        if (loginFragment != null) {
-            getSupportFragmentManager().beginTransaction().remove(loginFragment).commit();
-        }
-
-        ((DatabaseFragment) fragments.get(0)).updateFragment();
-        ((FavoriteFragment) fragments.get(1)).updateFragment();
-    }
-
-    public void showSignupFragment() {
-        viewSwitcher.showNext();
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragments_container, new SignUpFragment(), "signup");
-        fragmentTransaction.commit();
-
-    }
-
-    public void hideSignupFragment() {
-        viewSwitcher.showNext();
-
-        Fragment loginFragment = getSupportFragmentManager().findFragmentByTag("signup");
-        if (loginFragment != null) {
-            getSupportFragmentManager().beginTransaction().remove(loginFragment).commit();
-        }
-
-        ((DatabaseFragment) fragments.get(0)).updateFragment();
-        ((FavoriteFragment) fragments.get(1)).updateFragment();
-    }
-
-    public void showAccountFragment() {
-        viewSwitcher.showNext();
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragments_container, new AccountFragment(), "account");
-        fragmentTransaction.commit();
-
-
-    }
-
-    public void hideAccountFragment()
+    public void setCurrentPage(int i)
     {
-        viewSwitcher.showNext();
+        pagerMain.setCurrentItem(i);
 
-        Fragment accountFragment = getSupportFragmentManager().findFragmentByTag("account");
-        if (accountFragment != null) {
-            getSupportFragmentManager().beginTransaction().remove(accountFragment).commit();
+        switch (i)
+        {
+            case 0:
+                navigationView.setSelectedItemId(R.id.itHome);
+                break;
+            case 1:
+                navigationView.setSelectedItemId(R.id.itAccount);
+                break;
+            case 2:
+                navigationView.setSelectedItemId(R.id.itSettings);
+                break;
         }
 
-        ((DatabaseFragment) fragments.get(0)).updateFragment();
-        ((FavoriteFragment) fragments.get(1)).updateFragment();
     }
+
+    public void showFragment(String type) {
+        Fragment fragment = null;
+        switch (type) {
+            case "database":
+                fragment = new DatabaseFragment();
+                break;
+            case "history":
+                fragment = new HistoryFragment();
+                break;
+            case "favorite":
+                fragment = new FavoriteFragment();
+                break;
+            case "info":
+                fragment = new InfoFragment();
+                break;
+            case "map":
+                fragment = new MapFragment();
+                break;
+            case "login":
+                fragment = new LoginFragment();
+                ((AccountFragment) fragments.get(1)).updateFragment();
+                break;
+            case "signup":
+                fragment = new SignUpFragment();
+                ((AccountFragment) fragments.get(1)).updateFragment();
+                break;
+            default:
+                return;
+        }
+
+        fragmentManager = getSupportFragmentManager();
+
+        fragmentManager
+                .beginTransaction()
+                .replace(R.id.fragments_container, fragment, type)
+                .addToBackStack(type)
+                .commit();
+
+        viewSwitcher.showNext();
+    }
+
+    public void hideFragment() {
+        if (fragmentManager.getBackStackEntryCount() > 0)
+        {
+            fragmentManager.popBackStack();
+            viewSwitcher.showPrevious();
+        }
+    }
+
 
 }

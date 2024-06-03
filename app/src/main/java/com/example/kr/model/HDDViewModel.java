@@ -21,8 +21,8 @@ public class HDDViewModel extends AndroidViewModel {
     private LiveData<List<HardDriveData>> Drivers;
     private LiveData<List<HardDriveData>> filteredDrivers;
     private final MediatorLiveData<List<HardDriveData>> sortedDrivers = new MediatorLiveData<>();
-
-    public HDDViewModel(Application application) {
+    public HDDViewModel(Application application)
+    {
         super(application);
         AppDatabase db = AppDatabase.getDatabase(application);
         mDriveDao = db.hardDriveDao();
@@ -67,7 +67,7 @@ public class HDDViewModel extends AndroidViewModel {
 
         filteredDrivers = mDriveDao.getFiltered(manufactors.toArray(new String[manufactors.size()]),
                     minCapacity, maxCapacity, formFactors.toArray(new Double[formFactors.size()]),
-                    minRotatingSpeed, maxRotatingSpeed, favorite);
+                    minRotatingSpeed, maxRotatingSpeed, favorite, true);
 
         sortedDrivers.addSource(filteredDrivers, hardDriveData -> {
                 List<HardDriveData> sortedList = new ArrayList<>(hardDriveData);
@@ -78,6 +78,7 @@ public class HDDViewModel extends AndroidViewModel {
 
     public void clearFilteredDrivers() {
         sortedDrivers.removeSource(filteredDrivers);
+        sortedDrivers.removeSource(Drivers);
 
         sortedDrivers.addSource(Drivers, hardDriveData -> {
             List<HardDriveData> sortedList = new ArrayList<>(hardDriveData);

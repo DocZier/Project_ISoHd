@@ -3,6 +3,8 @@ package com.example.kr.fragment;
 import static android.content.ContentValues.TAG;
 
 import android.os.Bundle;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -39,6 +41,14 @@ public class LoginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                ((MainActivity) getActivity()).hideFragment();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     @Override
@@ -73,7 +83,7 @@ public class LoginFragment extends Fragment {
                                 if (task.isSuccessful()) {
                                     FirebaseUser user = mAuth.getCurrentUser();
                                     if (user != null) {
-                                        ((MainActivity) getActivity()).hideLoginFragment();
+                                        ((MainActivity) getActivity()).hideFragment();
                                     }
                                 } else {
                                     Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -104,7 +114,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                ((MainActivity) getActivity()).hideLoginFragment();
+                ((MainActivity) getActivity()).hideFragment();
             }
         });
 

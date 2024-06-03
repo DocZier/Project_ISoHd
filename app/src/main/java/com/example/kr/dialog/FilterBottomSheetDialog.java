@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.kr.R;
 import com.example.kr.model.HDDViewModel;
@@ -124,12 +125,14 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
             public void onClick(View v)
             {
                 ArrayList<String> titles = new ArrayList<>();
-                titles.addAll(Arrays.asList("manufacturers", "capacity", "interfaces", "formfactors", "rotationspeed"));
+                titles.addAll(Arrays.asList("manufacturers", "capacity", "formfactors", "rotationspeed"));
 
                 for(String title: titles)
                     clearFilters(title);
 
                 hddViewModel.clearFilteredDrivers();
+
+                clearFilterState();
 
                 dismiss();
             }
@@ -145,7 +148,6 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
     private void saveFilterState() {
         SharedPreferences.Editor editor = sharedPrefs.edit();
 
-        // Сохранение состояния CheckBox
         editor.putBoolean("checkbox_seagate", cbSeagate.isChecked());
         editor.putBoolean("checkbox_wd", cbWD.isChecked());
         editor.putBoolean("checkbox_samsung", cbSamsung.isChecked());
@@ -155,7 +157,6 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
         editor.putBoolean("checkbox_ff25", cbFF2_5.isChecked());
         editor.putBoolean("checkbox_ff35", cbFF3_5.isChecked());
 
-        // Сохранение значений EditText
         editor.putString("et_min_capacity", etMinCapacity.getText().toString());
         editor.putString("et_max_capacity", etMaxCapacity.getText().toString());
         editor.putString("et_min_rpm", etMinRpm.getText().toString());
@@ -164,8 +165,15 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
         editor.apply();
     }
 
+    private void clearFilterState() {
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+
+        editor.clear();
+
+        editor.apply();
+    }
+
     private void restoreFilterState() {
-        // Восстановление состояния CheckBox
         cbSeagate.setChecked(sharedPrefs.getBoolean("checkbox_seagate", false));
         cbWD.setChecked(sharedPrefs.getBoolean("checkbox_wd", false));
         cbSamsung.setChecked(sharedPrefs.getBoolean("checkbox_samsung", false));
@@ -175,7 +183,6 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
         cbFF2_5.setChecked(sharedPrefs.getBoolean("checkbox_ff25", false));
         cbFF3_5.setChecked(sharedPrefs.getBoolean("checkbox_ff35", false));
 
-        // Восстановление значений EditText
         etMinCapacity.setText(sharedPrefs.getString("et_min_capacity", ""));
         etMaxCapacity.setText(sharedPrefs.getString("et_max_capacity", ""));
         etMinRpm.setText(sharedPrefs.getString("et_min_rpm", ""));
@@ -266,9 +273,11 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
 
     private void updateFilterList(ArrayList<String> list, String value, boolean isChecked)
     {
-        if (isChecked) {
+        if (isChecked)
+        {
             list.add(value);
-        } else {
+        } else
+        {
             list.remove(value);
         }
         updateClearButtonVisibility();
@@ -276,24 +285,28 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
 
     private void updateFilterList(ArrayList<Double> list, String value, boolean isChecked, int i)
     {
-        if (isChecked) {
+        if (isChecked)
+        {
             list.add(Double.parseDouble(value));
-        } else {
+        } else
+        {
             list.remove(Double.parseDouble(value));
         }
         updateClearButtonVisibility();
     }
 
-    private void clearFilters(String filterType) {
-        switch (filterType) {
+    private void clearFilters(String filterType)
+    {
+        switch (filterType)
+        {
             case "manufacturers":
                 selectedManufacturers.clear();
-
-                // Сброс CheckBox для производителей
-                GridLayout manufacturersGridLayout = findViewById(R.id.manufactor_grid_layout);
-                for (int i = 0; i < manufacturersGridLayout.getChildCount(); i++) {
-                    View child = manufacturersGridLayout.getChildAt(i);
-                    if (child instanceof CheckBox) {
+                ConstraintLayout manufacturersLayout = findViewById(R.id.manufactor_layout);
+                for (int i = 0; i < manufacturersLayout.getChildCount(); i++)
+                {
+                    View child = manufacturersLayout.getChildAt(i);
+                    if (child instanceof CheckBox)
+                    {
                         ((CheckBox) child).setChecked(false);
                     }
                 }
@@ -304,7 +317,6 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
                 break;
             case "formfactors":
                 selectedFormFactors.clear();
-                // Сброс CheckBox для форм-факторов
                 LinearLayout formFactorsLinearLayout = findViewById(R.id.form_factor_linear_layout);
                 for (int i = 0; i < formFactorsLinearLayout.getChildCount(); i++) {
                     View child = formFactorsLinearLayout.getChildAt(i);
@@ -317,8 +329,11 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
                 etMinRpm.setText("");
                 etMaxRpm.setText("");
                 break;
+            default:
+                break;
         }
         updateClearButtonVisibility();
+
     }
 
     private void updateClearButtonVisibility() {

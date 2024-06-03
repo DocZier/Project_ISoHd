@@ -35,12 +35,8 @@ android {
 dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
+    implementation(libs.firebase.firestore)
     val room_version = "2.6.1"
-    val jsoup_version = "1.17.2"
-
-    //WebPageReader
-    implementation ("org.jsoup:jsoup:$jsoup_version")
-    //WebPageReader
 
     //Database
     implementation("androidx.room:room-runtime:$room_version")
@@ -50,7 +46,7 @@ dependencies {
     //Database
 
     implementation ("androidx.appcompat:appcompat:1.2.0")
-    implementation ("com.google.android.material:material:1.2.1")
+    implementation ("com.google.android.material:material:1.9.0")
     
     implementation(libs.appcompat)
     implementation(libs.material)

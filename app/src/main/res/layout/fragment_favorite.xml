@@ -1,120 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_favorite"
     tools:context=".fragment.FavoriteFragment">
 
-    <ViewSwitcher
-        android:id="@+id/viewSwitcher"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="false"
-        android:layout_weight="1">
-
-        <LinearLayout
-            android:id="@+id/login_register_view"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center"
             >
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Пожалуйста, войдите в аккаунт или зарегистрируйтесь"
-                android:textColor="@color/light_marine"
-                android:textAlignment="center"
-                android:textSize="18sp"
-                android:layout_marginBottom="16dp" />
-
-            <Button
-                android:id="@+id/login_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Войти"
-                android:textColor="@color/light_olive"
-                android:backgroundTint="@color/light_marine"/>
-
-            <Button
-                android:id="@+id/signup_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Зарегистрироваться"
-                android:textColor="@color/light_olive"
-                android:backgroundTint="@color/light_marine"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="15dp"
-            android:id="@+id/content"
-            >
             <LinearLayout
+                android:id="@+id/content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/act_sync"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:src="@drawable/ic_sync"
-                    android:backgroundTint="@color/button_bg_text_color"
-                    />
-
-                <ImageButton
-                    android:id="@+id/act_account"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:src="@drawable/ic_account"
-                    android:backgroundTint="@color/button_bg_text_color"
-                    />
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_bias="0.01"
+                android:paddingHorizontal="5dp"
+                >
 
                 <SearchView
                     android:id="@+id/search_bar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/layout_bg"
+                    android:background="@drawable/bottomsheet_item_bg"
                     android:queryHint="Поиск"
-                    />
+                    android:layout_marginHorizontal="2dp"/>
+
+                <ImageButton
+                    android:id="@+id/act_sync"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:backgroundTint="@color/light_marine"
+                    android:src="@drawable/ic_sync" />
+
+                <ImageButton
+                    android:id="@+id/act_hint"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:backgroundTint="@color/light_marine"
+                    android:src="@drawable/ic_sync" />
+
+                <ImageButton
+                    android:id="@+id/act_sort"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:backgroundTint="@color/light_marine"
+                    android:src="@drawable/ic_sync"  />
+
                 <ImageButton
                     android:id="@+id/act_filter"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:src="@drawable/ic_filter"
-                    android:backgroundTint="@color/button_bg_text_color"
-                    />
+                    android:layout_weight="2"
+                    android:backgroundTint="@color/light_marine"
+                    android:src="@drawable/ic_filter" />
+
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/hdd_recycler_view"
-                android:layout_margin="15dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="600dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical"
-                android:layout_weight="5"
-                />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/content"
+                app:layout_constraintVertical_bias="0.015" />
 
-            <TextView
-                android:id="@+id/empty_text_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="Здесь пока пусто"
-                android:layout_weight="5"
-                android:visibility="gone"
-                />
-
-        </LinearLayout>
-    </ViewSwitcher>
-</LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

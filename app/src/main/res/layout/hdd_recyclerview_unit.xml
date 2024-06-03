@@ -7,17 +7,6 @@
     android:layout_height="wrap_content"
     android:background="@drawable/recyclerview_bg"
     >
-    <ViewSwitcher
-        android:id="@+id/viewSwitcher"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inAnimation="@android:anim/slide_in_left"
-        android:outAnimation="@android:anim/slide_out_right"
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_weight="1">
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,6 +14,7 @@
             android:padding="5dp"
             android:id="@+id/unit"
             android:gravity="center"
+            android:layout_gravity="center"
             android:layout_weight="1"
 
             >
@@ -36,15 +26,19 @@
                 android:fontFamily="sans-serif"
                 android:text="IAUSDY2r74687124y412536"
                 android:textAllCaps="true"
-                android:textColor="@color/light_olive"
-                android:textSize="20dp"
-                android:textStyle="bold" />
+                android:textColor="@color/light_marine"
+                android:textSize="22dp"
+                android:textStyle="bold"
+                android:paddingTop="5dp"
+                android:paddingHorizontal="12dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_weight="1"
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="12dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp">
 
@@ -52,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Объём:"
-                    android:textColor="@color/light_olive"
+                    android:textColor="@color/light_marine"
                     android:textSize="16dp"
                     android:layout_weight="1"/>
 
@@ -66,36 +60,8 @@
                     android:layout_weight="1"
                     android:textSize="16dp"
                     android:textStyle="bold"
-                    android:textColor="@color/light_olive"/>
+                    android:textColor="@color/light_marine"/>
 
             </LinearLayout>
         </LinearLayout>
-
-        <GridLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:padding="5dp"
-            android:id="@+id/button_page"
-            android:gravity="center"
-            android:columnCount="2"
-            android:rowCount="1"
-            >
-            <ImageButton
-                android:id="@+id/act_more"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_more"
-                android:backgroundTint="@color/button_bg_color"
-                />
-            <ImageButton
-                android:id="@+id/act_add_favorite"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_bookmark_add"
-                android:backgroundTint="@color/button_bg_color"
-                />
-        </GridLayout>
-
-    </ViewSwitcher>
 </LinearLayout>

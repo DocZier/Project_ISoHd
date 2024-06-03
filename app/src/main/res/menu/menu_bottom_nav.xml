@@ -8,15 +8,15 @@
         android:icon="@drawable/ic_home"
         />
     <item
-        android:id="@+id/itFavorite"
+        android:id="@+id/itAccount"
         app:showAsAction="ifRoom"
-        android:title="Избранное"
-        android:icon="@drawable/ic_bookmarks"
+        android:title="Профиль"
+        android:icon="@drawable/ic_home"
         />
     <item
-        android:id="@+id/itInfo"
+        android:id="@+id/itSettings"
         app:showAsAction="ifRoom"
-        android:title="Справка"
-        android:icon="@drawable/ic_info"
+        android:title="Настройки"
+        android:icon="@drawable/ic_home"
         />
 </menu>

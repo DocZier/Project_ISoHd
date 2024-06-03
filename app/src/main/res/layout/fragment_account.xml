@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,62 +10,158 @@
     android:gravity="center"
     tools:context=".fragment.AccountFragment">
 
+    <ViewSwitcher
+        android:id="@+id/viewSwitcher"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false"
+        android:layout_weight="1"
+        >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/login_register_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/MainTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Пожалуйста, войдите в аккаунт или зарегистрируйтесь"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.37" />
+
+        <Button
+            android:id="@+id/login_button"
+            style="@style/ButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Войти"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:layout_constraintVertical_bias="0.055" />
+
+        <Button
+            android:id="@+id/signup_button"
+            style="@style/ButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Зарегистрироваться"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_button"
+            app:layout_constraintVertical_bias="0.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.cardview.widget.CardView
+        android:id="@+id/account_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
-        app:cardCornerRadius="30dp"
         app:cardElevation="20dp"
-        android:background="@drawable/custom_bg">
+        app:cardCornerRadius="18dp"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/bottomsheet_item_bg"
+            android:gravity="left"
             android:orientation="vertical"
-            android:gravity="center"
-            android:background="@drawable/bottomsheet_bg"
             android:padding="24dp">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:gravity="center"
+                >
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/unknown_profile"
+                    android:layout_weight="1"
+                    android:paddingVertical="10dp"
+                    android:layout_marginLeft="10dp"/>
+
+                <TextView
+                    android:id="@+id/username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="DocZier"
+                    android:layout_marginHorizontal="12dp"
+                    android:textColor="@color/light_marine"
+                    android:textSize="36sp"
+                    android:textStyle="bold"
+                    />
+            </LinearLayout>
+
             <Button
-                android:id="@+id/return_button"
-                android:layout_width="wrap_content"
+                android:id="@+id/history_button"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_gravity="top"
-                android:backgroundTint="@color/light_olive"
-                android:text="Назад"
+                android:text="История"
                 android:textColor="@color/light_marine"
-                android:textSize="14sp" />
-
-            <ImageView
-                android:layout_width="240dp"
-                android:layout_height="281dp"
-                android:src="@drawable/unknown_profile" />
-
-            <TextView
+                android:backgroundTint="@color/light_olive"
+                app:strokeWidth="2dp"
+                app:strokeColor="@color/light_marine"
+                app:cornerRadius="8dp"
+                android:textSize="18sp" />
+            <Button
+                android:id="@+id/favorite_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/username"
-                android:text="DocZier"
-                android:textSize="36sp"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                android:textColor="@color/light_olive"
-                android:layout_weight="1"/>
-
+                android:layout_weight="1"
+                android:text="Избранное"
+                android:textColor="@color/light_marine"
+                android:backgroundTint="@color/light_olive"
+                app:strokeWidth="2dp"
+                app:strokeColor="@color/light_marine"
+                app:cornerRadius="8dp"
+                android:textSize="18sp" />
+            <Button
+                android:id="@+id/stat_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Статистика"
+                android:textColor="@color/light_marine"
+                android:backgroundTint="@color/light_olive"
+                app:strokeWidth="2dp"
+                app:strokeColor="@color/light_marine"
+                app:cornerRadius="8dp"
+                android:textSize="18sp" />
 
             <Button
+                android:id="@+id/logout_button"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:id="@+id/logout_button"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
                 android:text="Выйти"
                 android:textColor="@color/light_marine"
-                android:textSize="18sp"
-                android:layout_marginTop="30dp"
                 android:backgroundTint="@color/light_olive"
-                android:layout_weight="1"/>
+                app:strokeWidth="2dp"
+                app:strokeColor="@color/light_marine"
+                app:cornerRadius="8dp"
+                android:textSize="18sp" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
-
-</LinearLayout>
+    </ViewSwitcher>
+</androidx.constraintlayout.widget.ConstraintLayout>

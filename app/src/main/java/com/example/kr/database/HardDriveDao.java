@@ -26,11 +26,12 @@ public interface HardDriveDao
             "Capacity BETWEEN :minCapacity AND :maxCapacity AND " +
             "FormFactor IN (:formFactors) AND " +
             "RotatingSpeed BETWEEN :minRotatingSpeed AND :maxRotatingSpeed AND " +
-            "Favorite == :isFavorite")
+            "( Favorite == :isFavorite OR Favorite == :constant )")
     LiveData<List<HardDriveData>> getFiltered(String[] manufactors, double minCapacity,
                                               double maxCapacity,
                                               Double[] formFactors, int minRotatingSpeed,
-                                              int maxRotatingSpeed, boolean isFavorite);
+                                              int maxRotatingSpeed, boolean isFavorite,
+                                              boolean constant);
     @Query("SELECT * FROM hard_drives WHERE uid LIKE :id")
     LiveData<HardDriveData> findID(int id);
 

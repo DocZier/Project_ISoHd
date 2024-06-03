@@ -7,6 +7,8 @@ import static android.view.View.VISIBLE;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -29,6 +31,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -53,6 +56,14 @@ public class SignUpFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                ((MainActivity) getActivity()).hideFragment();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     @Override
@@ -88,7 +99,7 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                ((MainActivity) getActivity()).hideSignupFragment();
+                ((MainActivity) getActivity()).hideFragment();
             }
         });
 
@@ -100,7 +111,7 @@ public class SignUpFragment extends Fragment {
                 String password = passwordEdit.getText().toString();
 
                 if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(getActivity(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Пожалуйста, заполните все поля", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -123,15 +134,42 @@ public class SignUpFragment extends Fragment {
 
                                     isLoggedIn = true;
 
+                                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                            .setDisplayName(username)
+                                            .build();
+
+                                    user.updateProfile(profileUpdates)
+                                            .addOnCompleteListener(task1 -> {
+                                                if (task1.isSuccessful()) {
+                                                    Log.d(TAG, "Username saved: " + username);
+                                                }
+                                            });
+
                                 } else {
                                     Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                    Toast.makeText(getActivity(), "Вход не выполнен.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(requireContext(), "Вход не выполнен.", Toast.LENGTH_SHORT).show();
                                     isLoggedIn = false;
                                 }
                             }
                         });
 
-                ((MainActivity) getActivity()).hideSignupFragment();
+                mAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    if (user != null) {
+                                        ((MainActivity) getActivity()).hideFragment();
+                                    }
+                                } else {
+                                    Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                    Toast.makeText(requireContext(), "Ошибка авторизации.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                ((MainActivity) getActivity()).hideFragment();
             }
         });
 
