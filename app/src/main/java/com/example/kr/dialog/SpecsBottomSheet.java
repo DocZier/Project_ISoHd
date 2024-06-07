@@ -100,11 +100,15 @@ public class SpecsBottomSheet extends BottomSheetDialog
 
             updateHardDriveData(hardDriveData);
 
-            dismiss();
         });
 
         buttonClear.setOnClickListener(v -> {
-            dismiss();
+            modelEditText.setText(hardDriveData.getModel());
+            capacityEditText.setText(String.valueOf(hardDriveData.getCapacity()));
+            manufactorEditText.setText(hardDriveData.getManufactor());
+            interfaceEditText.setText(hardDriveData.getInterfc());
+            formfactorEditText.setText(hardDriveData.getFormFactor()+"");
+            speedEditText.setText(String.valueOf(hardDriveData.getSpeed()));
         });
     }
 
@@ -124,51 +128,54 @@ public class SpecsBottomSheet extends BottomSheetDialog
 
     public void addToFavorites(HardDriveData hardDriveData)
     {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            CollectionReference favoritesRef = db.collection("users").document(userId).collection("favorites");
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        CollectionReference favoritesRef = db.collection("users").document(userId).collection("favorites");
+            hardDriveData.setFavorite(true);
+            updateHardDriveData(hardDriveData);
 
-        hardDriveData.setFavorite(true);
-        updateHardDriveData(hardDriveData);
-
-        favoritesRef.document(hardDriveData.uid+"").set(hardDriveData)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Test", "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("Test", "Error writing document", e);
-                    }
-                });
+            favoritesRef.document(hardDriveData.uid + "").set(hardDriveData)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("Test", "DocumentSnapshot successfully written!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w("Test", "Error writing document", e);
+                        }
+                    });
+        }
     }
 
     public void removeFromFavorites(HardDriveData hardDriveData)
     {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        CollectionReference favoritesRef = db.collection("users").document(userId).collection("favorites");
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            CollectionReference favoritesRef = db.collection("users").document(userId).collection("favorites");
 
-        hardDriveData.setFavorite(false);
-        updateHardDriveData(hardDriveData);
+            hardDriveData.setFavorite(false);
+            updateHardDriveData(hardDriveData);
 
-        favoritesRef.document(hardDriveData.uid+"").delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Test", "DocumentSnapshot successfully deleted!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("Test", "Error deleting document", e);
-                    }
-                });
+            favoritesRef.document(hardDriveData.uid + "").delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("Test", "DocumentSnapshot successfully deleted!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w("Test", "Error deleting document", e);
+                        }
+                    });
+        }
     }
 
     private void updateHardDriveData(HardDriveData hardDriveData) {

@@ -23,22 +23,18 @@
             >
 
             <TextView
+                style="@style/TitleTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Основные характеристики жёстких дисков"
-                android:textStyle="bold"
-                android:textSize="34dp"
-                android:textColor="@color/light_marine"
+                android:text="Основные характеристики"
                 android:paddingBottom="8dp" />
 
             <TextView
+                style="@style/TitleTextStyle"
                 android:id="@+id/capacityTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Объём"
-                android:textStyle="bold"
-                android:textSize="26dp"
-                android:textColor="@color/light_marine"
                 android:paddingTop="8dp"
                 android:paddingBottom="4dp" />
 
@@ -87,12 +83,10 @@
 
 
             <TextView
+                style="@style/TitleTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Интерфейс"
-                android:textStyle="bold"
-                android:textSize="26dp"
-                android:textColor="@color/light_marine"
                 android:paddingTop="8dp"
                 android:paddingBottom="4dp" />
 
@@ -138,13 +132,10 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/formFactorTitle"
+                style="@style/TitleTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Форм-фактор"
-                android:textStyle="bold"
-                android:textSize="26dp"
-                android:textColor="@color/light_marine"
                 android:paddingTop="8dp"
                 android:paddingBottom="4dp" />
 
@@ -180,12 +171,10 @@
                 android:textStyle="bold" />
 
             <TextView
+                style="@style/TitleTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Скорость вращения шпинделя"
-                android:textStyle="bold"
-                android:textSize="26dp"
-                android:textColor="@color/light_marine"
                 android:paddingTop="8dp"
                 android:paddingBottom="4dp" />
 

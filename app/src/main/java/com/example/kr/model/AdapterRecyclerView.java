@@ -3,7 +3,6 @@ package com.example.kr.model;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,15 +13,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kr.R;
 import com.example.kr.database.HardDriveData;
-import com.example.kr.fragment.DatabaseFragment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class AdapterRecyclerView extends RecyclerView.Adapter<AdapterRecyclerView.ViewHolder> {
 
     private List<HardDriveData> hardDriveDataList;
-    private AdapterCallback callback;
+    private final AdapterCallback callback;
 
     public AdapterRecyclerView(AdapterCallback callback) {
         this.hardDriveDataList = new ArrayList<>();
@@ -44,6 +45,13 @@ public class AdapterRecyclerView extends RecyclerView.Adapter<AdapterRecyclerVie
         holder.capacityTextView.setText(capacity / 1000 > 0 ? (capacity / 1000 + " TB") : (capacity + " GB"));
 
         holder.itemView.setOnClickListener(v -> {
+
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+            String currentDate = dateFormat.format(calendar.getTime());
+
+            callback.saveHistoryData(hardDriveData, currentDate);
+
             callback.onShowBottomSheet(hardDriveData);
         });
 
@@ -59,7 +67,8 @@ public class AdapterRecyclerView extends RecyclerView.Adapter<AdapterRecyclerVie
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView modelTextView;
         public TextView capacityTextView;
         public ViewSwitcher viewSwitcher;

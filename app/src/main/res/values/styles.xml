@@ -8,14 +8,24 @@
         <item name="android:textColorSecondary">@color/light_olive</item>
     </style>
 
+    <style name="TitleTextStyle">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
+        <item name="android:textSize">32dp</item>
+        <item name="android:textColor">@color/light_marine</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
     <style name="SpecTextStyle">
-        <item name="android:textSize">22dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
+        <item name="android:textSize">24dp</item>
         <item name="android:textColor">@color/light_marine</item>
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">sans-serif</item>
     </style>
 
     <style name="MainTextStyle">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
         <item name="android:textSize">20dp</item>
         <item name="android:textColor">@color/light_marine</item>
     </style>
@@ -23,7 +33,7 @@
     <style name="ButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="android:textSize">20dp</item>
         <item name="android:textColor">@color/light_marine</item>
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Large</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
         <item name="android:backgroundTint">@color/light_olive</item>
         <item name="strokeWidth">2dp</item>
         <item name="strokeColor">@color/light_marine</item>
@@ -38,8 +48,8 @@
 
     <style name="MainEditTextStyle" parent="Widget.AppCompat.EditText">
         <item name="android:textColor">@color/light_marine</item>
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Large</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
+        <item name="android:textSize">20dp</item>
     </style>
 
     <style name="HiddenEditText" parent="Widget.AppCompat.EditText">
@@ -47,13 +57,13 @@
         <item name="android:textColor">@color/light_marine</item>
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Large</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
         <item name="backgroundTint">@color/light_olive</item>
     </style>
 
     <style name="TextInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="android:textSize">16dp</item>
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Large</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
         <item name="android:textColorHint">@color/light_marine</item>
         <item name="hintTextColor">@color/light_marine</item>
         <item name="boxStrokeWidth">3dp</item>
@@ -66,6 +76,10 @@
     </style>
 
     <style name="Background">
+        <item name="android:background">@color/light_olive</item>
+    </style>
+
+    <style name="LauoutBackground">
         <item name="android:background">@color/light_olive</item>
     </style>
 

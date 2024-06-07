@@ -50,10 +50,6 @@ public class HDDViewModel extends AndroidViewModel {
         });
     }
 
-    public LiveData<List<HardDriveData>> getDrivers() {
-        return Drivers;
-    }
-
     public LiveData<List<HardDriveData>> getSortedDrivers() {
         return sortedDrivers;
     }
@@ -76,11 +72,51 @@ public class HDDViewModel extends AndroidViewModel {
         });
     }
 
+    public void sort(boolean isTypeA,boolean isLow)
+    {
+        sortedDrivers.removeSource(filteredDrivers);
+        sortedDrivers.removeSource(Drivers);
+
+        filteredDrivers = Drivers;
+
+        if(isTypeA)
+        {
+            if (isLow)
+                sortedDrivers.addSource(filteredDrivers, hardDriveData -> {
+                    List<HardDriveData> sortedList = new ArrayList<>(hardDriveData);
+                    sortedList.sort(Comparator.comparing(HardDriveData::getModel).reversed());
+                    sortedDrivers.setValue(sortedList);
+                });
+            else
+                sortedDrivers.addSource(filteredDrivers, hardDriveData -> {
+                    List<HardDriveData> sortedList = new ArrayList<>(hardDriveData);
+                    sortedList.sort(Comparator.comparing(HardDriveData::getModel));
+                    sortedDrivers.setValue(sortedList);
+                });
+        }
+        else
+        {
+            if (isLow)
+                sortedDrivers.addSource(filteredDrivers, hardDriveData -> {
+                    List<HardDriveData> sortedList = new ArrayList<>(hardDriveData);
+                    sortedList.sort(Comparator.comparingDouble(HardDriveData::getCapacity).reversed());
+                    sortedDrivers.setValue(sortedList);
+                });
+            else
+                sortedDrivers.addSource(filteredDrivers, hardDriveData -> {
+                    List<HardDriveData> sortedList = new ArrayList<>(hardDriveData);
+                    sortedList.sort(Comparator.comparingDouble(HardDriveData::getCapacity));
+                    sortedDrivers.setValue(sortedList);
+                });
+        }
+    }
+
     public void clearFilteredDrivers() {
         sortedDrivers.removeSource(filteredDrivers);
         sortedDrivers.removeSource(Drivers);
 
-        sortedDrivers.addSource(Drivers, hardDriveData -> {
+        filteredDrivers = Drivers;
+        sortedDrivers.addSource(filteredDrivers, hardDriveData -> {
             List<HardDriveData> sortedList = new ArrayList<>(hardDriveData);
             sortedList.sort(Comparator.comparingDouble(HardDriveData::getCapacity).reversed());
             sortedDrivers.setValue(sortedList);
@@ -96,6 +132,7 @@ public class HDDViewModel extends AndroidViewModel {
         searchResults.setValue(filteredList);
         return searchResults;
     }
+
 
     public void insert(HardDriveData driver) {
         mDriveDao.insert(driver);

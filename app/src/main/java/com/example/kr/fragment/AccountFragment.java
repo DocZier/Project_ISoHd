@@ -16,6 +16,8 @@ import android.widget.ViewSwitcher;
 
 import com.example.kr.R;
 import com.example.kr.activity.MainActivity;
+import com.example.kr.dialog.CalculatorBottomSheet;
+import com.example.kr.dialog.SortBottomSheet;
 import com.example.kr.model.AdapterRecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +27,8 @@ public class AccountFragment extends Fragment
 {
     private String userId = null;
     private ViewSwitcher currentViewSwitcher = null;
+    TextView usernameText;
+    String username="";
     private View firstView;
     private View secondView;
     public AccountFragment() {
@@ -46,6 +50,11 @@ public class AccountFragment extends Fragment
         if (FirebaseAuth.getInstance().getCurrentUser() != null)
         {
             userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            username = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+            if(usernameText!=null)
+            {
+                usernameText.setText(username);
+            }
         }
         else
             userId = null;
@@ -81,13 +90,20 @@ public class AccountFragment extends Fragment
 
         Button logoutButton = root.findViewById(R.id.logout_button);
 
-        TextView usernameText = root.findViewById(R.id.username);
+        usernameText = root.findViewById(R.id.username);
 
         changeView();
 
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            usernameText.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)
+        {
+            userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            username = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+            if(usernameText!=null)
+            {
+                usernameText.setText(username);
+            }
         }
+
 
         Button loginButton = root.findViewById(R.id.login_button);
         Button signupButton = root.findViewById(R.id.signup_button);
@@ -126,8 +142,8 @@ public class AccountFragment extends Fragment
         statisticButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //((MainActivity) getActivity()).showFragment("stat");
-                Toast.makeText(requireContext(), "Статистика", Toast.LENGTH_SHORT);
+                CalculatorBottomSheet dialog = new CalculatorBottomSheet(requireContext());
+                dialog.show();
             }
         });
 

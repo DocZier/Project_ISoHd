@@ -32,6 +32,7 @@ android {
     }
 }
 
+
 dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
@@ -44,6 +45,13 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
     implementation("androidx.room:room-paging:$room_version")
     //Database
+
+    //Map
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
+    implementation ("com.yandex.android:maps.mobile:4.6.1-full")
+    //Map
+
+    implementation ("com.google.code.gson:gson:2.10")
 
     implementation ("androidx.appcompat:appcompat:1.2.0")
     implementation ("com.google.android.material:material:1.9.0")

@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">KR</string>
+    <string name="app_name">IRS Disks</string>
+    <string name="textsize_small">20dp</string>
+    <string name="textsize_normal">24dp</string>
+    <string name="textsize_big">32dp</string>
 
     <string-array name="hard_drives_data">
         <item>Seagate,ST24000NM002H-3KS133,21800.0,3.3,3.5,0</item>

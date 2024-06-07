@@ -27,6 +27,7 @@
             android:layout_weight="1"
             android:background="@drawable/bottomsheet_item_bg"
             android:queryHint="Поиск"
+            android:iconifiedByDefault="false"
             android:layout_marginHorizontal="2dp"/>
 
         <ImageButton
@@ -43,7 +44,7 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:backgroundTint="@color/light_marine"
-            android:src="@drawable/ic_sync" />
+            android:src="@drawable/ic_help" />
 
         <ImageButton
             android:id="@+id/act_sort"
@@ -51,7 +52,7 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:backgroundTint="@color/light_marine"
-            android:src="@drawable/ic_sync"  />
+            android:src="@drawable/ic_sort"  />
 
         <ImageButton
             android:id="@+id/act_filter"
@@ -68,13 +69,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginVertical="10dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/content"
-        app:layout_constraintVertical_bias="0.015"/>
+        app:layout_constraintVertical_bias="0.0"
+        android:paddingBottom="80dp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

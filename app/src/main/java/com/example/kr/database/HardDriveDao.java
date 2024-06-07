@@ -49,4 +49,5 @@ public interface HardDriveDao
 
     @Query("DELETE FROM hard_drives")
     void deleteAll();
+
 }

@@ -125,7 +125,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Объём"
+                    android:text="Объём(ГБ)"
                     android:layout_weight="1"
                     style="@style/MainTextStyle"/>
 

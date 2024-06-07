@@ -59,7 +59,42 @@ public abstract class AppDatabase extends RoomDatabase
         databaseWriteExecutor.execute(() -> {
 
             HardDriveDao dao = INSTANCE.hardDriveDao();
-            dao.deleteAll();
+
+            try {
+                ArrayList<HardDriveData> hardDrives = new ArrayList<>();
+
+                String[] hardDriveStrings = context.getResources().getStringArray(R.array.hard_drives_data);
+
+                for (String hardDriveString : hardDriveStrings) {
+                    String[] parts = hardDriveString.split(",");
+                    if (parts.length == 6)
+                    {
+                        HardDriveData hardDrive = new HardDriveData(
+                                parts[0],
+                                parts[1],
+                                Double.parseDouble(parts[2]),
+                                parts[3],
+                                parts[4],
+                                Integer.parseInt(parts[5])
+                        );
+                        hardDrives.add(hardDrive);
+                    }
+                }
+
+                for (int i=0;i<hardDrives.size();i++) {
+                    hardDrives.get(i).uid = i+1;
+                    dao.update(hardDrives.get(i));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public static void start(final Context context) {
+        databaseWriteExecutor.execute(() -> {
+
+            HardDriveDao dao = INSTANCE.hardDriveDao();
 
             try {
                 ArrayList<HardDriveData> hardDrives = new ArrayList<>();

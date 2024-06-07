@@ -5,18 +5,18 @@
         android:id="@+id/itHome"
         app:showAsAction="ifRoom"
         android:title="Главная"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/menu"
         />
     <item
         android:id="@+id/itAccount"
         app:showAsAction="ifRoom"
         android:title="Профиль"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/ic_account"
         />
     <item
         android:id="@+id/itSettings"
         app:showAsAction="ifRoom"
         android:title="Настройки"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/settings"
         />
 </menu>

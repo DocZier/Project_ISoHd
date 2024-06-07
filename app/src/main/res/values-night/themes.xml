@@ -1,5 +1,12 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.KR" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowBackground">#FFFFFF</item>
+        <item name="colorOnSurface">#effee4</item>
+        <item name="colorPrimaryDark">#effee4</item>
+        <item name="colorPrimarySurface">#effee4</item>
+        <item name="isLightTheme">true</item>
     </style>
+    <color name="light_olive">#008080</color>
+    <color name="light_marine">#effee4</color>
 </resources>

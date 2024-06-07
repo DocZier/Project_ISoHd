@@ -42,6 +42,7 @@ import java.util.Map;
 public class SignUpFragment extends Fragment {
     EditText usernameEdit;
     EditText emailEdit;
+    EditText passwordConfirm;
     EditText passwordEdit;
     Button signupButton;
     FirebaseAuth mAuth;
@@ -72,23 +73,23 @@ public class SignUpFragment extends Fragment {
 
         usernameEdit = root.findViewById(R.id.username_signup);
         emailEdit = root.findViewById(R.id.email_signup);
+        passwordConfirm = root.findViewById(R.id.password_signup_copy);
         passwordEdit = root.findViewById(R.id.password_signup);
         signupButton = root.findViewById(R.id.signupButton);
 
         TextView signupTextView = root.findViewById(R.id.loginText);
         TextView returnTextView = root.findViewById(R.id.returnText);
 
-        signupButton.setEnabled(false);
-
         usernameEdit.addTextChangedListener(signupTextWatcher);
         emailEdit.addTextChangedListener(signupTextWatcher);
+        passwordConfirm.addTextChangedListener(signupTextWatcher);
         passwordEdit.addTextChangedListener(signupTextWatcher);
 
         signupTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                LoginFragment loginFragment = new LoginFragment();
+                LoginFragment loginFragment = new LoginFragment(null, null);
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragments_container, loginFragment, "login");
                 fragmentTransaction.commit();
@@ -106,12 +107,23 @@ public class SignUpFragment extends Fragment {
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = usernameEdit.getText().toString();
-                String email = emailEdit.getText().toString();
-                String password = passwordEdit.getText().toString();
+                String username = usernameEdit.getText().toString().trim();
+                String email = emailEdit.getText().toString().trim();
+                String password = passwordEdit.getText().toString().trim();
+                String confirm = passwordConfirm.getText().toString().trim();
 
-                if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
                     Toast.makeText(requireContext(), "Пожалуйста, заполните все поля", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(!confirm.equals(password))
+                {
+                    Toast.makeText(requireContext(), "Пароли должны совпадать", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(password.length()<=6)
+                {
+                    Toast.makeText(requireContext(), "Пароль должен состоять не менее чем из 6 символов", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -141,7 +153,7 @@ public class SignUpFragment extends Fragment {
                                     user.updateProfile(profileUpdates)
                                             .addOnCompleteListener(task1 -> {
                                                 if (task1.isSuccessful()) {
-                                                    Log.d(TAG, "Username saved: " + username);
+                                                    Log.d("Firebase", "Username saved: " + username);
                                                 }
                                             });
 
@@ -153,23 +165,8 @@ public class SignUpFragment extends Fragment {
                             }
                         });
 
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    if (user != null) {
-                                        ((MainActivity) getActivity()).hideFragment();
-                                    }
-                                } else {
-                                    Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                    Toast.makeText(requireContext(), "Ошибка авторизации.", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-
-                ((MainActivity) getActivity()).hideFragment();
+                ((MainActivity) getActivity()).update();
+                ((MainActivity) getActivity()).login(email, password);
             }
         });
 
@@ -187,7 +184,6 @@ public class SignUpFragment extends Fragment {
             String emailInput = emailEdit.getText().toString().trim();
             String passwordInput = passwordEdit.getText().toString().trim();
 
-            signupButton.setEnabled(!usernameInput.isEmpty() && !emailInput.isEmpty() && !passwordInput.isEmpty());
         }
 
         @Override

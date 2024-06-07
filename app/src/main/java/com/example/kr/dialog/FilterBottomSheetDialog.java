@@ -134,7 +134,6 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
 
                 clearFilterState();
 
-                dismiss();
             }
         });
 
@@ -187,6 +186,24 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
         etMaxCapacity.setText(sharedPrefs.getString("et_max_capacity", ""));
         etMinRpm.setText(sharedPrefs.getString("et_min_rpm", ""));
         etMaxRpm.setText(sharedPrefs.getString("et_max_rpm", ""));
+
+        double minCapacity = getValidValue(etMinCapacity, 0);
+        double maxCapacity = getValidValue(etMaxCapacity, Integer.MAX_VALUE);
+
+        int minRpm = getValidValue(etMinRpm, 0);
+        int maxRpm = getValidValue(etMaxRpm, Integer.MAX_VALUE);
+
+        if(selectedManufacturers.isEmpty())
+            selectedManufacturers = Manufacturers;
+
+        if(selectedFormFactors.isEmpty())
+            selectedFormFactors = FormFactors;
+
+        saveFilterState();
+
+        hddViewModel.filterDrivers(selectedManufacturers, minCapacity, maxCapacity,
+                selectedFormFactors, minRpm, maxRpm, isFavorite);
+
     }
 
 

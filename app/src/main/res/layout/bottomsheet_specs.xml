@@ -58,7 +58,7 @@
             style="@style/MainTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Объём:"
+            android:text="Объём (ГБ):"
             android:layout_weight="1"/>
 
 
@@ -72,6 +72,7 @@
             android:layout_weight="1"
             android:enabled="false"
             android:background="@drawable/bottomsheet_specs_bg"
+            android:inputType="number"
             />
     </LinearLayout>
 
@@ -154,7 +155,7 @@
 
         <EditText
             android:id="@+id/edit_formfactor"
-
+            android:inputType="number"
             style="@style/HiddenEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -194,6 +195,7 @@
             android:layout_weight="1"
             android:enabled="false"
             android:background="@drawable/bottomsheet_specs_bg"
+            android:inputType="number"
             />
     </LinearLayout>
 

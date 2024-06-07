@@ -2,6 +2,8 @@ package com.example.kr.fragment;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -28,8 +30,10 @@ import com.example.kr.R;
 import com.example.kr.activity.MainActivity;
 import com.example.kr.database.AppDatabase;
 import com.example.kr.database.HardDriveData;
+import com.example.kr.database.HistoryData;
 import com.example.kr.decorator.DecoratorRecyclerView;
 import com.example.kr.dialog.FilterBottomSheetDialog;
+import com.example.kr.dialog.SortBottomSheet;
 import com.example.kr.dialog.SpecsBottomSheet;
 import com.example.kr.model.AdapterCallback;
 import com.example.kr.model.AdapterRecyclerView;
@@ -50,7 +54,10 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,12 +65,9 @@ import java.util.List;
 public class FavoriteFragment extends Fragment implements AdapterCallback {
 
 
-    boolean isEdit = false;
     private String userId = null;
     private AdapterRecyclerView adapterRecyclerView;
     private RecyclerView recyclerView;
-    private FirebaseDatabase database = null;
-    private DatabaseReference userFavoritesRef = null;
     private HDDViewModel hddViewModel;
 
     public FavoriteFragment() {
@@ -149,14 +153,16 @@ public class FavoriteFragment extends Fragment implements AdapterCallback {
         sortButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(requireContext(), "Сортировка", Toast.LENGTH_SHORT).show();
+                SortBottomSheet dialog = new SortBottomSheet(requireContext(), hddViewModel);
+                dialog.show();
             }
         });
 
         hintButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(requireContext(), "Подсказка", Toast.LENGTH_SHORT).show();
+
+                ((MainActivity) getActivity()).showCustomDialog("a_favorites");
             }
         });
 
@@ -168,26 +174,27 @@ public class FavoriteFragment extends Fragment implements AdapterCallback {
     public void loadHardDriveData()
     {
         ArrayList<HardDriveData> hardDriveDataList = new ArrayList<>();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            CollectionReference favoritesRef = db.collection("users").document(userId).collection("favorites");
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        CollectionReference favoritesRef = db.collection("users").document(userId).collection("favorites");
+            favoritesRef.get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    HardDriveData hardDriveData = document.toObject(HardDriveData.class);
 
-        favoritesRef.get()
-            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            HardDriveData hardDriveData = document.toObject(HardDriveData.class);
-
-                            updateHardDriveData(hardDriveData);
+                                    updateHardDriveData(hardDriveData);
+                                }
+                            } else {
+                                Log.d(TAG, "Error getting hdds: ", task.getException());
+                            }
                         }
-                    } else {
-                        Log.d(TAG, "Error getting hdds: ", task.getException());
-                    }
-                }
-            });
+                    });
+        }
     }
 
     @Override
@@ -195,6 +202,70 @@ public class FavoriteFragment extends Fragment implements AdapterCallback {
     {
         SpecsBottomSheet dialog = new SpecsBottomSheet(requireContext(), hardDriveData);
         dialog.show();
+    }
+
+    @Override
+    public void saveHistoryData(HardDriveData hardDriveData, String currentDate) {
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("history_data", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        HistoryData historyData = getHistoryDataForDate(sharedPreferences, currentDate);
+
+        if (historyData != null)
+        {
+            if (!historyData.getHardDriveDataList().equals(hardDriveData))
+            {
+                ArrayList<HardDriveData> combinedList = new ArrayList<>(historyData.getHardDriveDataList());
+                combinedList.add(hardDriveData);
+
+                historyData.setHardDriveDataList(combinedList);
+
+                String jsonHistory = new Gson().toJson(historyData);
+                editor.putString(currentDate, jsonHistory);
+                editor.apply();
+            }
+        } else {
+            historyData = new HistoryData(currentDate, new ArrayList<>());
+            historyData.getHardDriveDataList().add(hardDriveData);
+
+            String jsonHistory = new Gson().toJson(historyData);
+            editor.putString(currentDate, jsonHistory);
+            editor.apply();
+        }
+
+        addToHistory(historyData, currentDate);
+    }
+
+    private HistoryData getHistoryDataForDate(SharedPreferences sharedPreferences, String date) {
+        String jsonHistory = sharedPreferences.getString(date, null);
+        if (jsonHistory != null) {
+            Type historyDataType = new TypeToken<HistoryData>() {}.getType();
+            return new Gson().fromJson(jsonHistory, historyDataType);
+        }
+        return null;
+    }
+
+    public void addToHistory(HistoryData historyData, String currentDate)
+    {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            CollectionReference historyRef = db.collection("users").document(userId).collection("history");
+
+            historyRef.document(currentDate).set(historyData)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("Test", "DocumentSnapshot successfully written!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w("Test", "Error writing document", e);
+                        }
+                    });
+        }
     }
 
     private void updateHardDriveData(HardDriveData hardDriveData) {
