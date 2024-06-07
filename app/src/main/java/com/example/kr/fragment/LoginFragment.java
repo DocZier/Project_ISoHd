@@ -47,7 +47,7 @@ public class LoginFragment extends Fragment {
     EditText passwordEdit;
     FirebaseAuth mAuth;
     Button loginButton;
-
+    Context context;
     private String email;
     private String password;
 
@@ -88,31 +88,14 @@ public class LoginFragment extends Fragment {
         {
             usernameEdit.setText(email);
             passwordEdit.setText(password);
-
-            mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                if (user != null) {
-                                    syncHistory();
-                                    ((MainActivity) getActivity()).hideFragment();
-                                }
-                            } else {
-                                Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                Toast.makeText(getActivity(), "Ошибка авторизации.", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
         }
 
         loginButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                String email = usernameEdit.getText().toString();
-                String password = passwordEdit.getText().toString();
+                email = usernameEdit.getText().toString();
+                password = passwordEdit.getText().toString();
 
                 if(email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(getActivity(), "Пожалуйста, заполните все поля", Toast.LENGTH_SHORT).show();
@@ -186,17 +169,15 @@ public class LoginFragment extends Fragment {
 
 
     public void syncHistory() {
-        ArrayList<HistoryData> offlineHistory = new ArrayList<>();
         ArrayList<HistoryData> onlineHistory = new ArrayList<>();
 
-        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("history_data", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)
+        {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
             CollectionReference historyRef = db.collection("users").document(userId).collection("history");
-
+            context = requireContext();
             historyRef.get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -207,41 +188,47 @@ public class LoginFragment extends Fragment {
                                     HistoryData historyData = new HistoryData(document.get("date").toString(), new ArrayList<>(helper));
 
                                     Log.i("History", helper.toString());
-                                    offlineHistory.add(historyData);
+                                    onlineHistory.add(historyData);
                                 }
                             } else {
                                 Log.d(TAG, "Error getting hdds: ", task.getException());
                             }
+                            if(task.isComplete())
+                            {
+                                SharedPreferences sharedPreferences = context.getSharedPreferences("history_data", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                                for (int i = 0; i < onlineHistory.size(); i++) {
+                                    HistoryData historyData = getHistoryDataForDate(sharedPreferences, onlineHistory.get(i).getDate());
+                                    ArrayList<HardDriveData> hardDriveData = onlineHistory.get(i).getHardDriveDataList();
+                                    if (historyData != null) {
+                                        if (!historyData.getHardDriveDataList().equals(hardDriveData)) {
+                                            ArrayList<HardDriveData> combinedList = new ArrayList<>(historyData.getHardDriveDataList());
+                                            combinedList.addAll(hardDriveData);
+
+                                            historyData.setHardDriveDataList(combinedList);
+
+                                            String jsonHistory = new Gson().toJson(historyData);
+                                            editor.putString(onlineHistory.get(i).getDate(), jsonHistory);
+                                            editor.apply();
+                                        }
+
+                                    } else {
+                                        historyData = new HistoryData(onlineHistory.get(i).getDate(), new ArrayList<>());
+                                        historyData.getHardDriveDataList().addAll(hardDriveData);
+
+                                        String jsonHistory = new Gson().toJson(historyData);
+                                        editor.putString(onlineHistory.get(i).getDate(), jsonHistory);
+                                        editor.apply();
+                                    }
+                                }
+                            }
                         }
+
                     });
         }
-
-
-        for (int i = 0; i < onlineHistory.size(); i++) {
-            HistoryData historyData = getHistoryDataForDate(sharedPreferences, onlineHistory.get(i).getDate());
-            ArrayList<HardDriveData> hardDriveData = onlineHistory.get(i).getHardDriveDataList();
-            if (historyData != null) {
-                if (!historyData.getHardDriveDataList().equals(hardDriveData)) {
-                    ArrayList<HardDriveData> combinedList = new ArrayList<>(historyData.getHardDriveDataList());
-                    combinedList.addAll(hardDriveData);
-
-                    historyData.setHardDriveDataList(combinedList);
-
-                    String jsonHistory = new Gson().toJson(historyData);
-                    editor.putString(onlineHistory.get(i).getDate(), jsonHistory);
-                    editor.apply();
-                }
-
-            } else {
-                historyData = new HistoryData(onlineHistory.get(i).getDate(), new ArrayList<>());
-                historyData.getHardDriveDataList().addAll(hardDriveData);
-
-                String jsonHistory = new Gson().toJson(historyData);
-                editor.putString(onlineHistory.get(i).getDate(), jsonHistory);
-                editor.apply();
-            }
-        }
     }
+
 
     private HistoryData getHistoryDataForDate(SharedPreferences sharedPreferences, String date) {
         String jsonHistory = sharedPreferences.getString(date, null);
@@ -251,4 +238,5 @@ public class LoginFragment extends Fragment {
         }
         return null;
     }
+
 }

@@ -1,5 +1,7 @@
 package com.example.kr.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,10 +29,10 @@ public class AccountFragment extends Fragment
     public AccountFragment() {
         userId = null;
 
+        if(currentViewSwitcher!=null)
+            changeView();
         if (FirebaseAuth.getInstance().getCurrentUser() != null)
         {
-            if(currentViewSwitcher!=null)
-                changeView();
             userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         }
@@ -38,12 +40,13 @@ public class AccountFragment extends Fragment
 
     public void updateFragment()
     {
+        if(currentViewSwitcher!=null)
+            changeView();
         if (FirebaseAuth.getInstance().getCurrentUser() != null)
         {
-            if(currentViewSwitcher!=null)
-                changeView();
             userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
             username = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+
             if(usernameText!=null)
             {
                 usernameText.setText(username);
@@ -144,6 +147,8 @@ public class AccountFragment extends Fragment
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
+                SharedPreferences sharedPreferences = requireContext().getSharedPreferences("history_data", Context.MODE_PRIVATE);
+                sharedPreferences.edit().clear().apply();
                 changeView();
             }
         });

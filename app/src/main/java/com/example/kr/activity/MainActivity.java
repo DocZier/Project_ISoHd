@@ -1,8 +1,11 @@
 package com.example.kr.activity;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ViewSwitcher;
 
@@ -17,6 +20,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.kr.R;
+import com.example.kr.database.HardDriveData;
+import com.example.kr.database.HistoryData;
 import com.example.kr.dialog.AboutCalculatorCustomDialog;
 import com.example.kr.dialog.AboutFavoritesCustomDialog;
 import com.example.kr.dialog.AboutHddsCustomDialog;
@@ -39,8 +44,11 @@ import com.example.kr.fragment.SignUpFragment;
 import com.example.kr.model.AdapterViewPager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.yandex.mapkit.MapKitFactory;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -225,6 +233,7 @@ public class MainActivity extends AppCompatActivity {
     public void login(String email, String password)
     {
         update();
+        hideFragment();
         Fragment fragment = new LoginFragment(email, password);
         fragmentManager = getSupportFragmentManager();
 
@@ -233,6 +242,8 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.fragments_container, fragment, "login")
                 .addToBackStack("login")
                 .commit();
+
+        viewSwitcher.showNext();
     }
 
     public void update()
