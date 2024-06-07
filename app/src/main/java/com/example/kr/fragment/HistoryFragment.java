@@ -1,21 +1,16 @@
 package com.example.kr.fragment;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kr.R;
 import com.example.kr.activity.MainActivity;
@@ -24,20 +19,11 @@ import com.example.kr.database.HistoryData;
 import com.example.kr.decorator.DecoratorRecyclerView;
 import com.example.kr.dialog.SpecsBottomSheet;
 import com.example.kr.model.AdapterCallback;
-import com.example.kr.model.AdapterRecyclerView;
 import com.example.kr.model.HistoryRecyclerViewAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Map;
 
 public class HistoryFragment extends Fragment implements AdapterCallback {

@@ -4,17 +4,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
-import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.kr.R;
 import com.example.kr.database.HardDriveData;
 import com.example.kr.database.HistoryData;
 import com.example.kr.decorator.DecoratorRecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecyclerViewAdapter.ViewHolder> {
 

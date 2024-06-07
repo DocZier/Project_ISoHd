@@ -11,7 +11,6 @@ import com.example.kr.database.HardDriveDao;
 import com.example.kr.database.HardDriveData;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -22,5 +22,9 @@ public class DecoratorRecyclerView extends RecyclerView.ItemDecoration
         {
             outRect.top = space;
         }
+        if (parent.getChildAdapterPosition(view) == 45)
+        {
+            outRect.bottom = 50;
+        }
     }
 }

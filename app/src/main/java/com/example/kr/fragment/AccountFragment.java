@@ -1,27 +1,20 @@
 package com.example.kr.fragment;
 
 import android.os.Bundle;
-
-import androidx.activity.OnBackPressedCallback;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewSwitcher;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.fragment.app.Fragment;
 
 import com.example.kr.R;
 import com.example.kr.activity.MainActivity;
 import com.example.kr.dialog.CalculatorBottomSheet;
-import com.example.kr.dialog.SortBottomSheet;
-import com.example.kr.model.AdapterRecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class AccountFragment extends Fragment
 {
@@ -34,10 +27,10 @@ public class AccountFragment extends Fragment
     public AccountFragment() {
         userId = null;
 
-        if(currentViewSwitcher!=null)
-            changeView();
         if (FirebaseAuth.getInstance().getCurrentUser() != null)
         {
+            if(currentViewSwitcher!=null)
+                changeView();
             userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         }
@@ -45,10 +38,10 @@ public class AccountFragment extends Fragment
 
     public void updateFragment()
     {
-        if(currentViewSwitcher!=null)
-            changeView();
         if (FirebaseAuth.getInstance().getCurrentUser() != null)
         {
+            if(currentViewSwitcher!=null)
+                changeView();
             userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
             username = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
             if(usernameText!=null)

@@ -2,28 +2,21 @@ package com.example.kr.dialog;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.kr.R;
 import com.example.kr.model.HDDViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -198,8 +191,6 @@ public class FilterBottomSheetDialog extends BottomSheetDialog {
 
         if(selectedFormFactors.isEmpty())
             selectedFormFactors = FormFactors;
-
-        saveFilterState();
 
         hddViewModel.filterDrivers(selectedManufacturers, minCapacity, maxCapacity,
                 selectedFormFactors, minRpm, maxRpm, isFavorite);

@@ -1,19 +1,10 @@
 package com.example.kr.fragment;
 
 import static android.content.ContentValues.TAG;
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
 
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-
-import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +13,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.kr.R;
 import com.example.kr.activity.MainActivity;
@@ -121,7 +118,7 @@ public class SignUpFragment extends Fragment {
                     Toast.makeText(requireContext(), "Пароли должны совпадать", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(password.length()<=6)
+                if(password.length()<6)
                 {
                     Toast.makeText(requireContext(), "Пароль должен состоять не менее чем из 6 символов", Toast.LENGTH_SHORT).show();
                     return;

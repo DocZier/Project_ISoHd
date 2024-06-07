@@ -1,8 +1,6 @@
 package com.example.kr.activity;
 
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -19,7 +17,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.kr.R;
-import com.example.kr.database.AppDatabase;
 import com.example.kr.dialog.AboutCalculatorCustomDialog;
 import com.example.kr.dialog.AboutFavoritesCustomDialog;
 import com.example.kr.dialog.AboutHddsCustomDialog;
@@ -28,19 +25,18 @@ import com.example.kr.dialog.AboutMapCustomDialog;
 import com.example.kr.dialog.AboutProfileCustomDialog;
 import com.example.kr.dialog.AboutResourcesCustomDialog;
 import com.example.kr.dialog.AuthorCustomDialog;
-import com.example.kr.dialog.CalculatorBottomSheet;
 import com.example.kr.dialog.InstructionCustomDialog;
 import com.example.kr.fragment.AccountFragment;
+import com.example.kr.fragment.DatabaseFragment;
+import com.example.kr.fragment.FavoriteFragment;
 import com.example.kr.fragment.HistoryFragment;
+import com.example.kr.fragment.InfoFragment;
 import com.example.kr.fragment.LoginFragment;
 import com.example.kr.fragment.MainMenuFragment;
 import com.example.kr.fragment.MapFragment;
 import com.example.kr.fragment.SettingsFragment;
 import com.example.kr.fragment.SignUpFragment;
 import com.example.kr.model.AdapterViewPager;
-import com.example.kr.fragment.DatabaseFragment;
-import com.example.kr.fragment.FavoriteFragment;
-import com.example.kr.fragment.InfoFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.yandex.mapkit.MapKitFactory;
